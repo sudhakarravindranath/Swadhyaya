@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#8B2500">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Swadhyaya">
+  <title>Swadhyaya — स्वाध्याय</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:       #8B2500;
+      --primary-dark:  #6B1C00;
+      --primary-light: #C44A1C;
+      --gold:          #C9A227;
+      --gold-light:    #E8C84A;
+      --accent:        #1A5E6E;
+      --accent-light:  #248094;
+      --bg:            #F7F0E6;
+      --surface:       #FFFDF9;
+      --border:        #E8D5BC;
+      --border-soft:   #F0E4CF;
+      --text:          #1C1008;
+      --text-2:        #7B5E4A;
+      --text-3:        #A8917D;
+      --danger:        #C0392B;
+      --header-h:      68px;
+      --nav-h:         62px;
+      --radius:        14px;
+      --radius-sm:     8px;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior: none;
+      overflow: hidden;
+    }
+
+    /* ── INSTALL BANNER ─────────────────────────────── */
+    .install-banner {
+      display: none;
+      background: var(--accent);
+      color: white;
+      padding: 10px 16px;
+      align-items: center;
+      gap: 10px;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 300;
+      transition: transform 0.3s;
+    }
+    .install-banner.visible { display: flex; }
+    .install-banner-text { flex: 1; font-size: 13px; font-weight: 400; }
+    .install-banner-btn {
+      background: white;
+      color: var(--accent);
+      border: none;
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      white-space: nowrap;
+    }
+    .install-dismiss {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.7);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    /* ── HEADER ─────────────────────────────────────── */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      z-index: 100;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+    }
+    .header.banner-open { top: 44px; }
+
+    .header-brand { flex: 1; }
+
+    .header-sanskrit {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      font-weight: 600;
+      font-size: 21px;
+      color: var(--gold);
+      line-height: 1.1;
+      letter-spacing: 0.03em;
+    }
+
+    .header-roman {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 10px;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-top: 1px;
+    }
+
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+
+    .icon-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      color: var(--gold-light);
+      font-size: 17px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .icon-btn:active { background: rgba(255,255,255,0.22); }
+
+    /* ── MAIN AREA ───────────────────────────────────── */
+    .main {
+      position: fixed;
+      top: var(--header-h);
+      bottom: var(--nav-h);
+      left: 0; right: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .screen {
+      display: none;
+      padding: 18px 14px 24px;
+      min-height: 100%;
+      animation: fadeIn 0.18s ease;
+    }
+    .screen.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── BOTTOM NAV ──────────────────────────────────── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      z-index: 100;
+      box-shadow: 0 -2px 16px rgba(0,0,0,0.07);
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 8px 0 10px;
+      color: var(--text-3);
+      transition: color 0.18s;
+      position: relative;
+    }
+    .nav-item.active { color: var(--primary); }
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 32px; height: 2px;
+      background: var(--primary);
+      border-radius: 0 0 2px 2px;
+    }
+
+    .nav-icon { font-size: 20px; line-height: 1; }
+    .nav-label { font-size: 10px; font-weight: 500; letter-spacing: 0.04em; }
+
+    /* ── HOME SCREEN ─────────────────────────────────── */
+    .greeting-card {
+      background: var(--primary);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .greeting-card::after {
+      content: 'स्वाध्याय';
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      position: absolute;
+      right: -10px; bottom: -18px;
+      font-size: 72px;
+      color: rgba(255,255,255,0.06);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .greeting-period {
+      font-size: 11px;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .greeting-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 600;
+      color: white;
+      line-height: 1.1;
+    }
+    .greeting-date {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      margin-top: 6px;
+    }
+    .greeting-quote {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: var(--gold-light);
+      line-height: 1.5;
+    }
+
+    .feed-status-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      text-align: center;
+      border: 1px dashed var(--border);
+      margin-bottom: 16px;
+    }
+    .feed-status-icon { font-size: 36px; margin-bottom: 10px; }
+    .feed-status-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .feed-status-text {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.55;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 10px;
+      margin-top: 4px;
+    }
+
+    .topic-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .topic-chip {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+
+    /* ── TOPICS SCREEN ───────────────────────────────── */
+    .screen-head {
+      margin-bottom: 18px;
+    }
+    .screen-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .screen-subtitle {
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-bottom: 80px;
+    }
+
+    .category-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .category-card.expanded {
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      padding: 13px 14px;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .cat-icon-wrap {
+      width: 42px; height: 42px;
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .cat-info { flex: 1; min-width: 0; }
+    .cat-name {
+      font-weight: 500;
+      font-size: 15px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cat-count {
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 2px;
+    }
+
+    .cat-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .ctrl-btn {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      color: var(--text-3);
+      transition: background 0.15s, color 0.15s;
+    }
+    .ctrl-btn:active { background: var(--bg); color: var(--text); }
+
+    .chevron {
+      display: inline-block;
+      color: var(--text-3);
+      font-size: 11px;
+      transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-left: 2px;
+    }
+    .category-card.expanded .chevron { transform: rotate(180deg); }
+
+    /* Subcategories */
+    .sub-list {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-top: 0 solid var(--border-soft);
+    }
+    .category-card.expanded .sub-list {
+      max-height: 600px;
+      border-top-width: 1px;
+    }
+    .sub-list-inner { padding: 6px 0; }
+
+    .sub-item {
+      display: flex;
+      align-items: center;
+      padding: 9px 14px 9px 68px;
+      gap: 10px;
+    }
+    .sub-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--primary);
+      opacity: 0.4;
+      flex-shrink: 0;
+    }
+    .sub-name {
+      flex: 1;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .sub-ctrl-btn {
+      width: 26px; height: 26px;
+      border-radius: 6px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      color: var(--text-3);
+    }
+    .sub-ctrl-btn:active { background: var(--bg); }
+
+    .add-sub-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px 9px 68px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      width: 100%;
+    }
+
+    /* ── FAB ─────────────────────────────────────────── */
+    .fab {
+      position: fixed;
+      bottom: calc(var(--nav-h) + 14px);
+      right: 18px;
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-size: 26px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(139,37,0,0.38);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 90;
+      transition: transform 0.18s, box-shadow 0.18s;
+      line-height: 1;
+    }
+    .fab:active { transform: scale(0.93); box-shadow: 0 2px 8px rgba(139,37,0,0.28); }
+    .fab.hidden { display: none; }
+
+    /* ── MODALS ──────────────────────────────────────── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(28,16,8,0.55);
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s;
+    }
+    .overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .sheet {
+      background: var(--surface);
+      border-radius: 20px 20px 0 0;
+      padding: 16px 18px 28px;
+      width: 100%;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .overlay.open .sheet { transform: translateY(0); }
+
+    .sheet-handle {
+      width: 38px; height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 0 auto 18px;
+    }
+
+    .sheet-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 23px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 18px;
+    }
+
+    .form-group { margin-bottom: 14px; }
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-2);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.18s;
+    }
+    .form-input:focus { border-color: var(--primary); }
+
+    .icon-picker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .icon-opt {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      font-size: 21px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .icon-opt.selected {
+      border-color: var(--primary);
+      background: rgba(139,37,0,0.07);
+    }
+
+    .sheet-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .btn {
+      flex: 1;
+      padding: 13px;
+      border-radius: 10px;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn:active { opacity: 0.82; }
+    .btn-primary  { background: var(--primary); color: white; }
+    .btn-ghost    { background: var(--bg); color: var(--text-2); border: 1.5px solid var(--border); }
+    .btn-danger   { background: var(--danger); color: white; }
+
+    .delete-message {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.55;
+      margin-bottom: 6px;
+    }
+
+    /* ── SAVED SCREEN ────────────────────────────────── */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 56px 28px;
+    }
+    .empty-icon  { font-size: 46px; margin-bottom: 14px; opacity: 0.45; }
+    .empty-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .empty-text  { font-size: 13px; color: var(--text-2); line-height: 1.55; }
+
+    /* ── SEARCH SCREEN ───────────────────────────────── */
+    .search-wrap { position: relative; margin-bottom: 18px; }
+    .search-ico  {
+      position: absolute;
+      left: 13px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 17px;
+      color: var(--text-3);
+      pointer-events: none;
+    }
+    .search-field {
+      width: 100%;
+      padding: 13px 13px 13px 42px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.18s;
+    }
+    .search-field:focus { border-color: var(--primary); }
+
+    .content-type-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .filter-pill {
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-pill.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Install Banner -->
+<div class="install-banner" id="installBanner">
+  <span style="font-size:18px">📲</span>
+  <span class="install-banner-text">Add Swadhyaya to your home screen</span>
+  <button class="install-banner-btn" id="installBtn">Install</button>
+  <button class="install-dismiss" id="installDismiss">✕</button>
+</div>
+
+<!-- Header -->
+<header class="header" id="appHeader">
+  <div class="header-brand">
+    <div class="header-sanskrit">स्वाध्याय</div>
+    <div class="header-roman">Swadhyaya</div>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" id="notifBtn" title="Notifications">🔔</button>
+  </div>
+</header>
+
+<!-- Main -->
+<main class="main" id="mainArea">
+
+  <!-- HOME -->
+  <div class="screen active" id="screen-home">
+    <div class="greeting-card">
+      <div class="greeting-period" id="greetingPeriod"></div>
+      <div class="greeting-name">Sudhakar</div>
+      <div class="greeting-date" id="greetingDate"></div>
+      <div class="greeting-quote">
+        स्वाध्यायान्मा प्रमदः — Let not self-study be neglected.
+      </div>
+    </div>
+
+    <div class="feed-status-card">
+      <div class="feed-status-icon">📡</div>
+      <div class="feed-status-title">Feed Coming in Next Build</div>
+      <div class="feed-status-text">
+        Your trusted sources and AI-discovered content will stream here once connected. 
+        Your topic areas are ready and waiting.
+      </div>
+    </div>
+
+    <div class="section-label">Active Topic Areas</div>
+    <div class="topic-chips" id="topicChips"></div>
+  </div>
+
+  <!-- TOPICS -->
+  <div class="screen" id="screen-topics">
+    <div class="screen-head">
+      <div class="screen-title">My Topics</div>
+      <div class="screen-subtitle">Tap to expand · Use ✏️ to edit · 🗑️ to delete</div>
+    </div>
+    <div class="category-list" id="categoryList"></div>
+  </div>
+
+  <!-- SAVED -->
+  <div class="screen" id="screen-saved">
+    <div class="screen-head">
+      <div class="screen-title">Saved</div>
+      <div class="screen-subtitle">Articles, podcasts, and videos you bookmark</div>
+    </div>
+    <div class="empty-state">
+      <div class="empty-icon">🔖</div>
+      <div class="empty-title">Nothing Saved Yet</div>
+      <div class="empty-text">When your feed is live, tap the bookmark icon on any item to save it here for later.</div>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="screen" id="screen-search">
+    <div class="screen-head">
+      <div class="screen-title">Search</div>
+    </div>
+    <div class="search-wrap">
+      <span class="search-ico">🔍</span>
+      <input class="search-field" type="search" placeholder="Search across your topics…">
+    </div>
+    <div class="content-type-filters">
+      <div class="filter-pill active">All</div>
+      <div class="filter-pill">Articles</div>
+      <div class="filter-pill">Podcasts</div>
+      <div class="filter-pill">Video</div>
+    </div>
+    <div class="empty-state" style="padding-top:32px">
+      <div class="empty-icon">🕵️</div>
+      <div class="empty-title">Search Ready</div>
+      <div class="empty-text">Once your feed is live, search will scan across all your topic areas and formats.</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+  <button class="nav-item active" data-screen="home">
+    <span class="nav-icon">🏛️</span>
+    <span class="nav-label">Home</span>
+  </button>
+  <button class="nav-item" data-screen="topics">
+    <span class="nav-icon">📚</span>
+    <span class="nav-label">Topics</span>
+  </button>
+  <button class="nav-item" data-screen="saved">
+    <span class="nav-icon">🔖</span>
+    <span class="nav-label">Saved</span>
+  </button>
+  <button class="nav-item" data-screen="search">
+    <span class="nav-icon">🔍</span>
+    <span class="nav-label">Search</span>
+  </button>
+</nav>
+
+<!-- FAB -->
+<button class="fab hidden" id="fab">＋</button>
+
+<!-- Modal: Category -->
+<div class="overlay" id="catOverlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="catModalTitle">Add Category</div>
+    <div class="form-group">
+      <label class="form-label">Name</label>
+      <input class="form-input" id="catNameInput" type="text" placeholder="e.g. Indian Classical Traditions" maxlength="60">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Icon</label>
+      <div class="icon-picker" id="iconPicker"></div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-ghost" id="catCancel">Cancel</button>
+      <button class="btn btn-primary" id="catSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Subcategory -->
+<div class="overlay" id="subOverlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="subModalTitle">Add Subtopic</div>
+    <div class="form-group">
+      <label class="form-label">Name</label>
+      <input class="form-input" id="subNameInput" type="text" placeholder="e.g. Sanskrit Grammar" maxlength="60">
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-ghost" id="subCancel">Cancel</button>
+      <button class="btn btn-primary" id="subSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Delete -->
+<div class="overlay" id="delOverlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Confirm Delete</div>
+    <p class="delete-message" id="delMsg"></p>
+    <div class="sheet-actions">
+      <button class="btn btn-ghost" id="delCancel">Cancel</button>
+      <button class="btn btn-danger" id="delConfirm">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+
+const DEFAULT_TOPICS = [
+  { id: 1,  name: "Indian Classical Traditions", icon: "🕉️",
+    subcategories: [
+      {id:101, name:"Sanskrit"}, {id:102, name:"Bhagavad Gita"},
+      {id:103, name:"Vedic Astronomy"}, {id:104, name:"Ayurveda"},
+      {id:105, name:"Kerala Mural Art"}
+    ]
+  },
+  { id: 2,  name: "Indian Financial Markets", icon: "📊",
+    subcategories: [
+      {id:201, name:"Insurance Policy"}, {id:202, name:"Market Analysis"},
+      {id:203, name:"Regulatory Affairs"}
+    ]
+  },
+  { id: 3,  name: "Geopolitics & Complex Systems", icon: "🌐",
+    subcategories: [
+      {id:301, name:"South Asia"}, {id:302, name:"China"},
+      {id:303, name:"Maritime Strategy"}, {id:304, name:"Systems Thinking"}
+    ]
+  },
+  { id: 4,  name: "Literature & Writing", icon: "✍️",
+    subcategories: [
+      {id:401, name:"Memoir"}, {id:402, name:"Fiction"},
+      {id:403, name:"Essays"}, {id:404, name:"Indian Writing"}
+    ]
+  },
+  { id: 5,  name: "Visual Arts & Photography", icon: "🎨",
+    subcategories: [
+      {id:501, name:"Kerala Mural"}, {id:502, name:"Sculpture"},
+      {id:503, name:"Photography"}, {id:504, name:"Film"}
+    ]
+  },
+  { id: 6,  name: "Wildlife & Nature", icon: "🦜",
+    subcategories: [
+      {id:601, name:"Birding"}, {id:602, name:"Ecology"},
+      {id:603, name:"Western Ghats"}
+    ]
+  },
+  { id: 7,  name: "Cinema", icon: "🎬",
+    subcategories: [
+      {id:701, name:"Indian Cinema"}, {id:702, name:"World Cinema"},
+      {id:703, name:"Documentary"}
+    ]
+  },
+  { id: 8,  name: "Linguistics", icon: "📜",
+    subcategories: [
+      {id:801, name:"Sanskrit-Dravidian Connections"},
+      {id:802, name:"Konkani"}, {id:803, name:"Etymology"}
+    ]
+  },
+  { id: 9,  name: "Travel & Geography", icon: "🗺️",
+    subcategories: [
+      {id:901, name:"Kerala"}, {id:902, name:"India"},
+      {id:903, name:"East Africa"}, {id:904, name:"Hill Stations"}
+    ]
+  },
+  { id: 10, name: "AI & Technology", icon: "🤖",
+    subcategories: [
+      {id:1001, name:"Large Language Models"},
+      {id:1002, name:"AI Policy"}, {id:1003, name:"Tech Ethics"}
+    ]
+  }
+];
+
+const ICON_OPTIONS = [
+  "🕉️","📚","📊","🌐","✍️","🎨","🦜","🎬","📜","🗺️","🤖","🏛️",
+  "🌿","🔬","📰","🎵","🎙️","🧘","🏔️","🌊","🦅","🌺","🧭","⚖️",
+  "🌙","☀️","🔭","🏺","🎭","📡","🌏","🎯","💡","🔮","🌸"
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+
+let topics    = JSON.parse(localStorage.getItem('sw_topics') || 'null') || DEFAULT_TOPICS;
+let nextId    = 10000;
+let selIcon   = "📚";
+let editCatId = null, editSubId = null, editSubCatId = null;
+let delCatId  = null, delSubId  = null;
+
+function persist() { localStorage.setItem('sw_topics', JSON.stringify(topics)); }
+function newId()   { return nextId++; }
+
+// ── GREETING ──────────────────────────────────────────────────────────────────
+
+function setGreeting() {
+  const h = new Date().getHours();
+  let period = h < 5 ? "Late Night" : h < 12 ? "Good Morning" : h < 17 ? "Good Afternoon" : h < 20 ? "Good Evening" : "Good Night";
+  document.getElementById('greetingPeriod').textContent = period;
+  const now = new Date();
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('greetingDate').textContent =
+    `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+}
+
+// ── TOPIC CHIPS ───────────────────────────────────────────────────────────────
+
+function renderChips() {
+  document.getElementById('topicChips').innerHTML =
+    topics.map(t => `<span class="topic-chip">${t.icon} ${t.name}</span>`).join('');
+}
+
+// ── CATEGORIES ────────────────────────────────────────────────────────────────
+
+const CAT_BG = ['#FFF0E8','#E8F5F7','#F0EBF8','#E8F5E8','#FFF8E8',
+                '#F5E8F8','#E8F0F5','#F8EDE8','#EDF5E8','#E8EAF8',
+                '#FDF5E8','#E8F8F5'];
+
+function catBg(idx) { return CAT_BG[idx % CAT_BG.length]; }
+
+function renderCategories() {
+  document.getElementById('categoryList').innerHTML = topics.map((cat, idx) => `
+    <div class="category-card" id="cat-${cat.id}">
+      <div class="category-header" onclick="toggleCat(${cat.id})">
+        <div class="cat-icon-wrap" style="background:${catBg(idx)}">${cat.icon}</div>
+        <div class="cat-info">
+          <div class="cat-name">${escHtml(cat.name)}</div>
+          <div class="cat-count">${cat.subcategories.length} subtopic${cat.subcategories.length !== 1 ? 's' : ''}</div>
+        </div>
+        <div class="cat-controls">
+          <button class="ctrl-btn" onclick="event.stopPropagation();openEditCat(${cat.id})" title="Edit">✏️</button>
+          <button class="ctrl-btn" onclick="event.stopPropagation();openDelCat(${cat.id})" title="Delete">🗑️</button>
+          <span class="chevron">▾</span>
+        </div>
+      </div>
+      <div class="sub-list">
+        <div class="sub-list-inner">
+          ${cat.subcategories.map(sub => `
+            <div class="sub-item">
+              <div class="sub-dot"></div>
+              <span class="sub-name">${escHtml(sub.name)}</span>
+              <button class="sub-ctrl-btn" onclick="openEditSub(${cat.id},${sub.id})" title="Edit">✏️</button>
+              <button class="sub-ctrl-btn" onclick="openDelSub(${cat.id},${sub.id})" title="Delete">🗑️</button>
+            </div>
+          `).join('')}
+          <button class="add-sub-btn" onclick="openAddSub(${cat.id})">＋ Add Subtopic</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toggleCat(id) {
+  document.getElementById(`cat-${id}`).classList.toggle('expanded');
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+
+document.querySelectorAll('.nav-item').forEach(btn => {
+  btn.addEventListener('click', () => navigate(btn.dataset.screen));
+});
+
+function navigate(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById(`screen-${screen}`).classList.add('active');
+  document.querySelector(`[data-screen="${screen}"]`).classList.add('active');
+  document.getElementById('fab').classList.toggle('hidden', screen !== 'topics');
+}
+
+// Filter pills (search screen)
+document.querySelectorAll('.filter-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+  });
+});
+
+// ── OVERLAY HELPERS ───────────────────────────────────────────────────────────
+
+function openOverlay(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeOverlay(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+['catOverlay','subOverlay','delOverlay'].forEach(id => {
+  document.getElementById(id).addEventListener('click', e => {
+    if (e.target === document.getElementById(id)) closeOverlay(id);
+  });
+});
+
+// ── CATEGORY MODAL ────────────────────────────────────────────────────────────
+
+function renderIconPicker() {
+  document.getElementById('iconPicker').innerHTML = ICON_OPTIONS.map(ic =>
+    `<div class="icon-opt${ic === selIcon ? ' selected' : ''}" onclick="pickIcon('${ic}')">${ic}</div>`
+  ).join('');
+}
+
+function pickIcon(ic) {
+  selIcon = ic;
+  document.querySelectorAll('.icon-opt').forEach(el =>
+    el.classList.toggle('selected', el.textContent === ic)
+  );
+}
+
+document.getElementById('fab').addEventListener('click', openAddCat);
+
+function openAddCat() {
+  editCatId = null; selIcon = "📚";
+  document.getElementById('catModalTitle').textContent = "Add Category";
+  document.getElementById('catNameInput').value = '';
+  renderIconPicker();
+  openOverlay('catOverlay');
+  setTimeout(() => document.getElementById('catNameInput').focus(), 350);
+}
+
+function openEditCat(id) {
+  const cat = topics.find(t => t.id === id);
+  if (!cat) return;
+  editCatId = id; selIcon = cat.icon;
+  document.getElementById('catModalTitle').textContent = "Edit Category";
+  document.getElementById('catNameInput').value = cat.name;
+  renderIconPicker();
+  openOverlay('catOverlay');
+}
+
+document.getElementById('catCancel').addEventListener('click', () => closeOverlay('catOverlay'));
+document.getElementById('catSave').addEventListener('click', () => {
+  const name = document.getElementById('catNameInput').value.trim();
+  if (!name) return;
+  if (editCatId) {
+    const cat = topics.find(t => t.id === editCatId);
+    if (cat) { cat.name = name; cat.icon = selIcon; }
+  } else {
+    topics.push({ id: newId(), name, icon: selIcon, subcategories: [] });
+  }
+  persist(); renderCategories(); renderChips();
+  closeOverlay('catOverlay');
+});
+
+// ── SUBCATEGORY MODAL ─────────────────────────────────────────────────────────
+
+function openAddSub(catId) {
+  editSubCatId = catId; editSubId = null;
+  document.getElementById('subModalTitle').textContent = "Add Subtopic";
+  document.getElementById('subNameInput').value = '';
+  openOverlay('subOverlay');
+  setTimeout(() => document.getElementById('subNameInput').focus(), 350);
+}
+
+function openEditSub(catId, subId) {
+  const cat = topics.find(t => t.id === catId);
+  const sub = cat?.subcategories.find(s => s.id === subId);
+  if (!sub) return;
+  editSubCatId = catId; editSubId = subId;
+  document.getElementById('subModalTitle').textContent = "Edit Subtopic";
+  document.getElementById('subNameInput').value = sub.name;
+  openOverlay('subOverlay');
+}
+
+document.getElementById('subCancel').addEventListener('click', () => closeOverlay('subOverlay'));
+document.getElementById('subSave').addEventListener('click', () => {
+  const name = document.getElementById('subNameInput').value.trim();
+  if (!name) return;
+  const cat = topics.find(t => t.id === editSubCatId);
+  if (!cat) return;
+  if (editSubId) {
+    const sub = cat.subcategories.find(s => s.id === editSubId);
+    if (sub) sub.name = name;
+  } else {
+    cat.subcategories.push({ id: newId(), name });
+  }
+  persist(); renderCategories();
+  closeOverlay('subOverlay');
+});
+
+// ── DELETE MODAL ──────────────────────────────────────────────────────────────
+
+function openDelCat(id) {
+  delCatId = id; delSubId = null;
+  const cat = topics.find(t => t.id === id);
+  document.getElementById('delMsg').textContent =
+    `"${cat?.name}" and all its subtopics will be permanently removed.`;
+  openOverlay('delOverlay');
+}
+
+function openDelSub(catId, subId) {
+  delCatId = catId; delSubId = subId;
+  const cat = topics.find(t => t.id === catId);
+  const sub = cat?.subcategories.find(s => s.id === subId);
+  document.getElementById('delMsg').textContent =
+    `"${sub?.name}" will be permanently removed from "${cat?.name}".`;
+  openOverlay('delOverlay');
+}
+
+document.getElementById('delCancel').addEventListener('click', () => closeOverlay('delOverlay'));
+document.getElementById('delConfirm').addEventListener('click', () => {
+  if (delSubId) {
+    const cat = topics.find(t => t.id === delCatId);
+    if (cat) cat.subcategories = cat.subcategories.filter(s => s.id !== delSubId);
+  } else {
+    topics = topics.filter(t => t.id !== delCatId);
+  }
+  persist(); renderCategories(); renderChips();
+  closeOverlay('delOverlay');
+});
+
+// ── NOTIFICATION PERMISSION ───────────────────────────────────────────────────
+
+document.getElementById('notifBtn').addEventListener('click', async () => {
+  if ('Notification' in window) {
+    const perm = await Notification.requestPermission();
+    if (perm === 'granted') {
+      document.getElementById('notifBtn').textContent = '🔔';
+      new Notification('Swadhyaya', { body: 'Notifications are now active.' });
+    }
+  }
+});
+
+// ── PWA INSTALL ───────────────────────────────────────────────────────────────
+
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const banner = document.getElementById('installBanner');
+  banner.classList.add('visible');
+  document.getElementById('appHeader').classList.add('banner-open');
+  document.getElementById('mainArea').style.top = 'calc(var(--header-h) + 44px)';
+});
+
+document.getElementById('installBtn').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  if (outcome === 'accepted') hideBanner();
+});
+
+document.getElementById('installDismiss').addEventListener('click', hideBanner);
+
+function hideBanner() {
+  document.getElementById('installBanner').classList.remove('visible');
+  document.getElementById('appHeader').classList.remove('banner-open');
+  document.getElementById('mainArea').style.top = '';
+}
+
+window.addEventListener('appinstalled', hideBanner);
+
+// ── SERVICE WORKER ────────────────────────────────────────────────────────────
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+
+setGreeting();
+renderChips();
+renderCategories();
+</script>
+</body>
+</html>
