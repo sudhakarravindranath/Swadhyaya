@@ -96,7 +96,6 @@
     .feed-empty-icon { font-size:32px; margin-bottom:10px; }
     .feed-empty-title { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; margin-bottom:6px; }
     .feed-empty-text { font-size:12px; color:var(--text-2); line-height:1.55; }
-
     .feed-progress { font-size:11px; color:var(--text-3); text-align:center; padding:8px; }
 
     .screen-head { margin-bottom:18px; }
@@ -294,21 +293,49 @@ const DEFAULT_TOPICS = [
   {id:10,name:"AI & Technology",             icon:"🤖", subcategories:[{id:1001,name:"Large Language Models"},{id:1002,name:"AI Policy"},{id:1003,name:"Tech Ethics"}]}
 ];
 
-// ── RSS SOURCES — one reliable source per category ────────────────────────────
+// ── RSS SOURCES — two per category, carefully chosen ─────────────────────────
 const RSS_SOURCES = [
-  {url:"https://scroll.in/feed",                                                          label:"Scroll",           format:"article", catId:1},
-  {url:"https://economictimes.indiatimes.com/industry/banking/insurance/rssfeeds/13358570.cms", label:"Economic Times", format:"article", catId:2},
-  {url:"https://thediplomat.com/feed/",                                                   label:"The Diplomat",     format:"article", catId:3},
-  {url:"https://lithub.com/feed/",                                                        label:"Lit Hub",          format:"article", catId:4},
-  {url:"https://hyperallergic.com/feed/",                                                 label:"Hyperallergic",    format:"article", catId:5},
-  {url:"https://www.downtoearth.org.in/rss/",                                             label:"Down to Earth",    format:"article", catId:6},
-  {url:"https://www.filmcompanion.in/feed/",                                              label:"Film Companion",   format:"article", catId:7},
-  {url:"https://languagelog.ldc.upenn.edu/nll/?feed=rss2",                                label:"Language Log",     format:"article", catId:8},
-  {url:"https://www.thehindu.com/life-and-style/travel/feeder/default.rss",               label:"The Hindu Travel", format:"article", catId:9},
-  {url:"https://www.technologyreview.com/feed/",                                          label:"MIT Tech Review",  format:"article", catId:10},
+  // 1. Indian Classical Traditions
+  {url:"https://scroll.in/feed",                                                                  label:"Scroll",                format:"article", catId:1},
+  {url:"https://www.indicatoday.com/feed/",                                                       label:"Indica Today",          format:"article", catId:1},
+
+  // 2. Indian Financial Markets
+  {url:"https://economictimes.indiatimes.com/industry/banking/insurance/rssfeeds/13358570.cms",   label:"Economic Times",        format:"article", catId:2},
+  {url:"https://www.moneycontrol.com/rss/economy.xml",                                            label:"Moneycontrol",          format:"article", catId:2},
+
+  // 3. Geopolitics & Complex Systems
+  {url:"https://thediplomat.com/feed/",                                                           label:"The Diplomat",          format:"article", catId:3},
+  {url:"https://www.orfonline.org/feed/",                                                         label:"ORF",                   format:"article", catId:3},
+
+  // 4. Literature & Writing
+  {url:"https://lithub.com/feed/",                                                                label:"Lit Hub",               format:"article", catId:4},
+  {url:"https://www.theparisreview.org/feed",                                                     label:"Paris Review",          format:"article", catId:4},
+
+  // 5. Visual Arts & Photography
+  {url:"https://hyperallergic.com/feed/",                                                         label:"Hyperallergic",         format:"article", catId:5},
+  {url:"https://www.lensculture.com/rss/articles",                                                label:"LensCulture",           format:"article", catId:5},
+
+  // 6. Wildlife & Nature
+  {url:"https://www.downtoearth.org.in/rss/",                                                     label:"Down to Earth",         format:"article", catId:6},
+  {url:"https://www.birdingworld.co.uk/feed/",                                                    label:"Birding World",         format:"article", catId:6},
+
+  // 7. Cinema
+  {url:"https://www.filmcompanion.in/feed/",                                                      label:"Film Companion",        format:"article", catId:7},
+  {url:"https://www.thehindu.com/entertainment/movies/feeder/default.rss",                        label:"The Hindu Cinema",      format:"article", catId:7},
+
+  // 8. Linguistics
+  {url:"https://languagelog.ldc.upenn.edu/nll/?feed=rss2",                                        label:"Language Log",          format:"article", catId:8},
+  {url:"https://www.economist.com/johnson/rss.xml",                                               label:"The Economist Johnson", format:"article", catId:8},
+
+  // 9. Travel & Geography
+  {url:"https://www.thehindu.com/life-and-style/travel/feeder/default.rss",                       label:"The Hindu Travel",      format:"article", catId:9},
+  {url:"https://www.outlooktraveller.com/rss.xml",                                                label:"Outlook Traveller",     format:"article", catId:9},
+
+  // 10. AI & Technology
+  {url:"https://www.technologyreview.com/feed/",                                                  label:"MIT Tech Review",       format:"article", catId:10},
+  {url:"https://thegradient.pub/rss/",                                                            label:"The Gradient",          format:"article", catId:10},
 ];
 
-// Using allorigins.win as CORS proxy — no rate limits, no API key needed
 const PROXY = "https://api.allorigins.win/get?url=";
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
@@ -320,7 +347,6 @@ let searchFilter = 'all';
 let nextId = 10000;
 let selIcon = "📚";
 let editCatId=null, editSubId=null, editSubCatId=null, delCatId=null, delSubId=null;
-let fetchAbort = null;
 
 function persist()      { localStorage.setItem('sw_topics', JSON.stringify(topics)); }
 function persistSaved() { localStorage.setItem('sw_saved',  JSON.stringify(savedItems)); }
@@ -349,8 +375,7 @@ function parseRSS(xmlStr) {
     const title = get('title');
     if (!title || !link) return;
     items.push({
-      title,
-      link,
+      title, link,
       description: get('description') || get('content\\:encoded') || '',
       pubDate: get('pubDate'),
       guid: get('guid') || link,
@@ -376,7 +401,7 @@ function timeAgo(ds) {
   return d.toLocaleDateString('en-IN', {day:'numeric', month:'short'});
 }
 
-// ── FEED FETCH — sequential with progress ─────────────────────────────────────
+// ── FEED FETCH ────────────────────────────────────────────────────────────────
 async function fetchFeed() {
   document.getElementById('feedSkeleton').style.display = '';
   document.getElementById('feedList').style.display = 'none';
@@ -388,18 +413,15 @@ async function fetchFeed() {
 
   const catMap = {};
   topics.forEach(t => { catMap[t.id] = t; });
-
   allItems = [];
   let loaded = 0;
 
   for (const src of RSS_SOURCES) {
     try {
-      const proxyUrl = PROXY + encodeURIComponent(src.url);
-      const resp = await fetch(proxyUrl, {signal: AbortSignal.timeout(10000)});
+      const resp = await fetch(PROXY + encodeURIComponent(src.url), {signal: AbortSignal.timeout(10000)});
       const json = await resp.json();
-      const xml  = json.contents;
-      if (xml) {
-        const items = parseRSS(xml);
+      if (json.contents) {
+        const items = parseRSS(json.contents);
         const cat = catMap[src.catId];
         items.slice(0, 5).forEach(item => {
           allItems.push({
@@ -415,14 +437,13 @@ async function fetchFeed() {
           });
         });
       }
-    } catch(e) { /* skip failed feeds silently */ }
+    } catch(e) { /* skip silently */ }
 
     loaded++;
     document.getElementById('feedProgress').textContent =
-      `Loading… ${loaded}/${RSS_SOURCES.length} sources`;
+      `Loading… ${loaded} of ${RSS_SOURCES.length} sources`;
 
-    // Show partial results as they come in
-    if (loaded % 3 === 0 && allItems.length > 0) {
+    if (loaded % 4 === 0 && allItems.length > 0) {
       document.getElementById('feedSkeleton').style.display = 'none';
       document.getElementById('feedList').style.display = 'flex';
       allItems.sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
