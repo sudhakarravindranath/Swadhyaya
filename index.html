@@ -25,31 +25,40 @@
     }
     html,body { height:100%; font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); -webkit-tap-highlight-color:transparent; overscroll-behavior:none; overflow:hidden; }
 
+    /* ── INSTALL BANNER ── */
     .install-banner { display:none; background:var(--accent); color:white; padding:10px 16px; align-items:center; gap:10px; position:fixed; top:0; left:0; right:0; z-index:300; }
     .install-banner.visible { display:flex; }
     .install-banner-text { flex:1; font-size:13px; }
     .install-banner-btn { background:white; color:var(--accent); border:none; padding:7px 14px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
     .install-dismiss { background:none; border:none; color:rgba(255,255,255,0.7); font-size:18px; cursor:pointer; padding:4px; }
 
-    .header { position:fixed; top:0; left:0; right:0; height:var(--header-h); background:var(--primary); display:flex; align-items:center; padding:0 18px; z-index:100; box-shadow:0 2px 16px rgba(0,0,0,0.25); }
+    /* ── HEADER ── */
+    .header { position:fixed; top:0; left:0; right:0; height:var(--header-h); background:var(--primary); display:flex; align-items:center; padding:0 18px; z-index:100; box-shadow:0 2px 16px rgba(0,0,0,0.25); gap:10px; }
     .header.banner-open { top:44px; }
     .header-brand { flex:1; }
     .header-sanskrit { font-family:'Noto Sans Devanagari',sans-serif; font-weight:600; font-size:21px; color:var(--gold); line-height:1.1; letter-spacing:0.03em; }
     .header-roman { font-family:'Cormorant Garamond',serif; font-size:10px; color:rgba(255,255,255,0.6); letter-spacing:0.3em; text-transform:uppercase; margin-top:1px; }
-    .icon-btn { width:38px; height:38px; border-radius:50%; border:none; background:rgba(255,255,255,0.1); color:var(--gold-light); font-size:17px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    .icon-btn { width:38px; height:38px; border-radius:50%; border:none; background:rgba(255,255,255,0.1); color:var(--gold-light); font-size:17px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .icon-btn:active { background:rgba(255,255,255,0.2); }
 
+    /* ── MAIN AREA ── */
     .main { position:fixed; top:var(--header-h); bottom:var(--nav-h); left:0; right:0; overflow-y:auto; -webkit-overflow-scrolling:touch; }
     .screen { display:none; padding:16px 14px 24px; min-height:100%; animation:fadeIn 0.18s ease; }
     .screen.active { display:block; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
 
+    /* ── BOTTOM NAV ── */
     .bottom-nav { position:fixed; bottom:0; left:0; right:0; height:var(--nav-h); background:var(--surface); border-top:1px solid var(--border); display:flex; z-index:100; box-shadow:0 -2px 16px rgba(0,0,0,0.07); }
     .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; border:none; background:none; cursor:pointer; padding:8px 0 10px; color:var(--text-3); position:relative; font-family:'DM Sans',sans-serif; }
     .nav-item.active { color:var(--primary); }
     .nav-item.active::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:32px; height:2px; background:var(--primary); border-radius:0 0 2px 2px; }
-    .nav-icon { font-size:20px; line-height:1; }
+    .nav-icon { font-size:20px; line-height:1; position:relative; display:inline-block; }
     .nav-label { font-size:10px; font-weight:500; letter-spacing:0.04em; }
 
+    /* ── UNREAD BADGE ── */
+    .unread-badge { position:absolute; top:-4px; right:-8px; min-width:17px; height:17px; background:var(--primary); color:white; font-size:9px; font-weight:700; border-radius:9px; display:flex; align-items:center; justify-content:center; padding:0 4px; font-family:'DM Sans',sans-serif; border:1.5px solid var(--surface); }
+
+    /* ── GREETING CARD ── */
     .greeting-card { background:var(--primary); border-radius:var(--radius); padding:20px; margin-bottom:14px; position:relative; overflow:hidden; }
     .greeting-card::after { content:'स्वाध्याय'; font-family:'Noto Sans Devanagari',sans-serif; position:absolute; right:-10px; bottom:-18px; font-size:72px; color:rgba(255,255,255,0.06); line-height:1; pointer-events:none; }
     .greeting-period { font-size:11px; color:rgba(255,255,255,0.6); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px; }
@@ -57,51 +66,76 @@
     .greeting-date { font-size:12px; color:rgba(255,255,255,0.55); margin-top:6px; }
     .greeting-quote { margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.12); font-family:'Cormorant Garamond',serif; font-style:italic; font-size:14px; color:var(--gold-light); line-height:1.5; }
 
-    .feed-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    /* ── FEED HEADER ── */
+    .feed-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:8px; }
     .section-label { font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-3); }
+    .feed-header-actions { display:flex; align-items:center; gap:6px; }
     .refresh-btn { background:none; border:none; cursor:pointer; display:flex; align-items:center; gap:5px; font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; color:var(--accent); padding:4px 8px; border-radius:6px; }
     .refresh-icon { font-size:14px; display:inline-block; }
     .refresh-icon.spinning { animation:spin 0.8s linear infinite; }
     @keyframes spin { to{transform:rotate(360deg)} }
+    .hide-read-btn { background:none; border:1.5px solid var(--border); cursor:pointer; display:flex; align-items:center; gap:4px; font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; color:var(--text-3); padding:4px 9px; border-radius:20px; }
+    .hide-read-btn.active { border-color:var(--accent); color:var(--accent); background:rgba(26,94,110,0.06); }
 
-    .filter-row { display:flex; gap:7px; overflow-x:auto; padding-bottom:4px; margin-bottom:14px; scrollbar-width:none; }
+    /* ── FEED STATS ── */
+    .feed-stats { font-size:11px; color:var(--text-3); margin-bottom:10px; padding:0 2px; }
+    .feed-stats strong { color:var(--text-2); font-weight:600; }
+
+    /* ── FILTER ROWS ── */
+    .filter-section { margin-bottom:14px; }
+    .filter-row { display:flex; gap:7px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; }
+    .filter-row + .filter-row { margin-top:7px; }
     .filter-row::-webkit-scrollbar { display:none; }
-    .f-pill { flex-shrink:0; padding:6px 13px; border-radius:20px; border:1.5px solid var(--border); background:var(--surface); font-size:12px; font-weight:500; color:var(--text-2); cursor:pointer; font-family:'DM Sans',sans-serif; }
+    .f-pill { flex-shrink:0; padding:6px 13px; border-radius:20px; border:1.5px solid var(--border); background:var(--surface); font-size:12px; font-weight:500; color:var(--text-2); cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.15s; }
     .f-pill.active { background:var(--primary); border-color:var(--primary); color:white; }
+    .f-pill.cat-active { background:var(--accent); border-color:var(--accent); color:white; }
 
+    /* ── FEED LIST ── */
     .feed-list { display:flex; flex-direction:column; gap:10px; padding-bottom:16px; }
-    .feed-card { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; cursor:pointer; display:block; color:inherit; }
-    .feed-card:active { opacity:0.88; }
-    .feed-card-inner { padding:14px; }
+
+    /* ── FEED CARD ── */
+    .feed-card { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; cursor:pointer; display:block; color:inherit; position:relative; transition:opacity 0.2s; }
+    .feed-card:active { opacity:0.82; }
+    .feed-card.is-read { opacity:0.52; }
+    .feed-card.is-read .feed-card-title { color:var(--text-2); }
+    .feed-card-accent { width:3px; position:absolute; left:0; top:0; bottom:0; border-radius:var(--radius) 0 0 var(--radius); }
+    .feed-card-inner { padding:14px 14px 14px 17px; }
     .feed-card-meta { display:flex; align-items:center; gap:6px; margin-bottom:8px; flex-wrap:wrap; }
     .cat-tag { font-size:10px; font-weight:600; padding:2px 8px; border-radius:10px; background:rgba(139,37,0,0.08); color:var(--primary); }
     .fmt-tag { font-size:10px; font-weight:500; padding:2px 7px; border-radius:10px; }
     .fmt-article { background:rgba(26,94,110,0.09); color:var(--accent); }
     .fmt-podcast { background:rgba(148,57,165,0.09); color:#7B35A0; }
     .fmt-video   { background:rgba(192,57,43,0.09); color:#C0392B; }
+    .read-tick { font-size:11px; color:var(--text-3); margin-left:2px; }
     .bm-btn { background:none; border:none; cursor:pointer; font-size:16px; padding:2px; margin-left:auto; }
-    .feed-card-title { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:600; color:var(--text); line-height:1.35; margin-bottom:7px; }
+    .feed-card-title { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:600; color:var(--text); line-height:1.35; margin-bottom:7px; transition:color 0.2s; }
     .feed-card-desc { font-size:12px; color:var(--text-2); line-height:1.55; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-    .feed-card-footer { display:flex; align-items:center; justify-content:space-between; padding:9px 14px; border-top:1px solid var(--border-soft); background:var(--bg); }
+    .feed-card-footer { display:flex; align-items:center; justify-content:space-between; padding:9px 14px 9px 17px; border-top:1px solid var(--border-soft); background:var(--bg); }
     .feed-card-source { font-size:11px; color:var(--text-3); font-weight:500; }
+    .feed-card-right { display:flex; align-items:center; gap:8px; }
+    .feed-card-read-time { font-size:10px; color:var(--text-3); }
     .feed-card-date   { font-size:11px; color:var(--text-3); }
 
+    /* ── SKELETON ── */
     .skeleton-list { display:flex; flex-direction:column; gap:10px; }
     .skeleton-card { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); padding:14px; }
     .skeleton-line { background:linear-gradient(90deg,var(--border) 25%,var(--border-soft) 50%,var(--border) 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; border-radius:6px; margin-bottom:9px; }
     @keyframes shimmer { to{background-position:-200% 0} }
     .sk-sm{height:12px;width:55%} .sk-lg{height:18px;width:90%} .sk-lg2{height:18px;width:72%;margin-bottom:10px} .sk-md{height:12px;width:80%} .sk-md2{height:12px;width:60%;margin-bottom:0}
 
+    /* ── EMPTY / PROGRESS ── */
     .feed-empty { background:var(--surface); border-radius:var(--radius); border:1px dashed var(--border); padding:28px 20px; text-align:center; }
     .feed-empty-icon { font-size:32px; margin-bottom:10px; }
     .feed-empty-title { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; margin-bottom:6px; }
     .feed-empty-text { font-size:12px; color:var(--text-2); line-height:1.55; }
     .feed-progress { font-size:11px; color:var(--text-3); text-align:center; padding:8px; }
 
+    /* ── SCREEN HEADS ── */
     .screen-head { margin-bottom:18px; }
     .screen-title { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:700; color:var(--text); line-height:1; margin-bottom:4px; }
     .screen-subtitle { font-size:12px; color:var(--text-3); }
 
+    /* ── TOPICS / CATEGORIES ── */
     .category-list { display:flex; flex-direction:column; gap:8px; padding-bottom:80px; }
     .category-card { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; }
     .category-card.expanded { box-shadow:0 2px 12px rgba(0,0,0,0.08); }
@@ -124,10 +158,12 @@
     .sub-ctrl-btn { width:26px; height:26px; border-radius:6px; border:none; background:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--text-3); }
     .add-sub-btn { display:flex; align-items:center; gap:8px; padding:9px 14px 9px 68px; background:none; border:none; cursor:pointer; color:var(--accent); font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; width:100%; }
 
+    /* ── FAB ── */
     .fab { position:fixed; bottom:calc(var(--nav-h) + 14px); right:18px; width:54px; height:54px; border-radius:50%; background:var(--primary); color:white; font-size:26px; border:none; cursor:pointer; box-shadow:0 4px 18px rgba(139,37,0,0.38); display:flex; align-items:center; justify-content:center; z-index:90; }
     .fab:active { transform:scale(0.93); }
     .fab.hidden { display:none; }
 
+    /* ── OVERLAYS / SHEETS ── */
     .overlay { position:fixed; inset:0; background:rgba(28,16,8,0.55); z-index:200; display:flex; align-items:flex-end; opacity:0; pointer-events:none; transition:opacity 0.22s; }
     .overlay.open { opacity:1; pointer-events:all; }
     .sheet { background:var(--surface); border-radius:20px 20px 0 0; padding:16px 18px 28px; width:100%; transform:translateY(100%); transition:transform 0.3s cubic-bezier(0.32,0.72,0,1); }
@@ -148,10 +184,13 @@
     .btn-danger  { background:var(--danger); color:white; }
     .delete-message { font-size:14px; color:var(--text-2); line-height:1.55; margin-bottom:6px; }
 
+    /* ── SAVED / SEARCH EMPTY ── */
     .empty-state { display:flex; flex-direction:column; align-items:center; text-align:center; padding:56px 28px; }
     .empty-icon { font-size:46px; margin-bottom:14px; opacity:0.45; }
     .empty-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--text); margin-bottom:8px; }
     .empty-text  { font-size:13px; color:var(--text-2); line-height:1.55; }
+
+    /* ── SEARCH ── */
     .search-wrap { position:relative; margin-bottom:18px; }
     .search-ico { position:absolute; left:13px; top:50%; transform:translateY(-50%); font-size:17px; color:var(--text-3); pointer-events:none; }
     .search-field { width:100%; padding:13px 13px 13px 42px; border:1.5px solid var(--border); border-radius:12px; background:var(--surface); font-family:'DM Sans',sans-serif; font-size:15px; color:var(--text); outline:none; }
@@ -159,6 +198,10 @@
     .content-type-filters { display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
     .filter-pill { padding:7px 14px; border-radius:20px; border:1.5px solid var(--border); background:var(--surface); font-size:12px; font-weight:500; color:var(--text-2); cursor:pointer; font-family:'DM Sans',sans-serif; }
     .filter-pill.active { background:var(--primary); border-color:var(--primary); color:white; }
+
+    /* ── MARK ALL READ BUTTON ── */
+    .mark-all-btn { background:none; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; color:var(--text-3); padding:4px 8px; border-radius:6px; }
+    .mark-all-btn:active { background:var(--bg); }
   </style>
 </head>
 <body>
@@ -175,11 +218,12 @@
     <div class="header-sanskrit">स्वाध्याय</div>
     <div class="header-roman">Swadhyaya</div>
   </div>
-  <button class="icon-btn" id="notifBtn">🔔</button>
+  <button class="icon-btn" id="notifBtn" title="Enable notifications">🔔</button>
 </header>
 
 <main class="main" id="mainArea">
 
+  <!-- HOME -->
   <div class="screen active" id="screen-home">
     <div class="greeting-card">
       <div class="greeting-period" id="greetingPeriod"></div>
@@ -187,16 +231,27 @@
       <div class="greeting-date" id="greetingDate"></div>
       <div class="greeting-quote">स्वाध्यायान्मा प्रमदः — Let not self-study be neglected.</div>
     </div>
+
     <div class="feed-header">
       <div class="section-label">Your Feed</div>
-      <button class="refresh-btn" id="refreshBtn"><span class="refresh-icon" id="refreshIcon">↻</span> Refresh</button>
+      <div class="feed-header-actions">
+        <button class="hide-read-btn" id="hideReadBtn" title="Toggle read items">👁 Hide read</button>
+        <button class="refresh-btn" id="refreshBtn"><span class="refresh-icon" id="refreshIcon">↻</span> Refresh</button>
+      </div>
     </div>
-    <div class="filter-row" id="feedFilters">
-      <div class="f-pill active" data-filter="all">All</div>
-      <div class="f-pill" data-filter="article">Articles</div>
-      <div class="f-pill" data-filter="podcast">Podcasts</div>
-      <div class="f-pill" data-filter="video">Video</div>
+
+    <div class="feed-stats" id="feedStats"></div>
+
+    <div class="filter-section">
+      <div class="filter-row" id="feedFilters">
+        <div class="f-pill active" data-filter="all">All formats</div>
+        <div class="f-pill" data-filter="article">Articles</div>
+        <div class="f-pill" data-filter="podcast">Podcasts</div>
+        <div class="f-pill" data-filter="video">Video</div>
+      </div>
+      <div class="filter-row" id="catFilters"></div>
     </div>
+
     <div id="feedContainer">
       <div class="skeleton-list" id="feedSkeleton">
         <div class="skeleton-card"><div class="skeleton-line sk-sm"></div><div class="skeleton-line sk-lg"></div><div class="skeleton-line sk-lg2"></div><div class="skeleton-line sk-md"></div><div class="skeleton-line sk-md2"></div></div>
@@ -208,6 +263,7 @@
     </div>
   </div>
 
+  <!-- TOPICS -->
   <div class="screen" id="screen-topics">
     <div class="screen-head">
       <div class="screen-title">My Topics</div>
@@ -216,6 +272,7 @@
     <div class="category-list" id="categoryList"></div>
   </div>
 
+  <!-- SAVED -->
   <div class="screen" id="screen-saved">
     <div class="screen-head">
       <div class="screen-title">Saved</div>
@@ -224,6 +281,7 @@
     <div id="savedList"></div>
   </div>
 
+  <!-- SEARCH -->
   <div class="screen" id="screen-search">
     <div class="screen-head"><div class="screen-title">Search</div></div>
     <div class="search-wrap">
@@ -242,7 +300,10 @@
 </main>
 
 <nav class="bottom-nav">
-  <button class="nav-item active" data-screen="home"><span class="nav-icon">🏛️</span><span class="nav-label">Home</span></button>
+  <button class="nav-item active" data-screen="home">
+    <span class="nav-icon">🏛️<span class="unread-badge" id="unreadBadge" style="display:none">0</span></span>
+    <span class="nav-label">Home</span>
+  </button>
   <button class="nav-item" data-screen="topics"><span class="nav-icon">📚</span><span class="nav-label">Topics</span></button>
   <button class="nav-item" data-screen="saved"><span class="nav-icon">🔖</span><span class="nav-label">Saved</span></button>
   <button class="nav-item" data-screen="search"><span class="nav-icon">🔍</span><span class="nav-label">Search</span></button>
@@ -250,6 +311,7 @@
 
 <button class="fab hidden" id="fab">＋</button>
 
+<!-- Category modal -->
 <div class="overlay" id="catOverlay">
   <div class="sheet">
     <div class="sheet-handle"></div>
@@ -260,6 +322,7 @@
   </div>
 </div>
 
+<!-- Subtopic modal -->
 <div class="overlay" id="subOverlay">
   <div class="sheet">
     <div class="sheet-handle"></div>
@@ -269,6 +332,7 @@
   </div>
 </div>
 
+<!-- Delete confirmation -->
 <div class="overlay" id="delOverlay">
   <div class="sheet">
     <div class="sheet-handle"></div>
@@ -281,75 +345,70 @@
 <script>
 // ── TOPIC DATA ────────────────────────────────────────────────────────────────
 const DEFAULT_TOPICS = [
-  {id:1, name:"Indian Classical Traditions", icon:"🕉️", subcategories:[{id:101,name:"Sanskrit"},{id:102,name:"Bhagavad Gita"},{id:103,name:"Vedic Astronomy"},{id:104,name:"Ayurveda"},{id:105,name:"Kerala Mural Art"}]},
-  {id:2, name:"Indian Financial Markets",    icon:"📊", subcategories:[{id:201,name:"Insurance Policy"},{id:202,name:"Market Analysis"},{id:203,name:"Regulatory Affairs"}]},
-  {id:3, name:"Geopolitics & Complex Systems",icon:"🌐",subcategories:[{id:301,name:"South Asia"},{id:302,name:"China"},{id:303,name:"Maritime Strategy"},{id:304,name:"Systems Thinking"}]},
-  {id:4, name:"Literature & Writing",        icon:"✍️", subcategories:[{id:401,name:"Memoir"},{id:402,name:"Fiction"},{id:403,name:"Essays"},{id:404,name:"Indian Writing"}]},
-  {id:5, name:"Visual Arts & Photography",   icon:"🎨", subcategories:[{id:501,name:"Kerala Mural"},{id:502,name:"Sculpture"},{id:503,name:"Photography"},{id:504,name:"Film"}]},
-  {id:6, name:"Wildlife & Nature",           icon:"🦜", subcategories:[{id:601,name:"Birding"},{id:602,name:"Ecology"},{id:603,name:"Western Ghats"}]},
-  {id:7, name:"Cinema",                      icon:"🎬", subcategories:[{id:701,name:"Indian Cinema"},{id:702,name:"World Cinema"},{id:703,name:"Documentary"}]},
-  {id:8, name:"Linguistics",                 icon:"📜", subcategories:[{id:801,name:"Sanskrit-Dravidian Connections"},{id:802,name:"Konkani"},{id:803,name:"Etymology"}]},
-  {id:9, name:"Travel & Geography",          icon:"🗺️", subcategories:[{id:901,name:"Kerala"},{id:902,name:"India"},{id:903,name:"East Africa"},{id:904,name:"Hill Stations"}]},
-  {id:10,name:"AI & Technology",             icon:"🤖", subcategories:[{id:1001,name:"Large Language Models"},{id:1002,name:"AI Policy"},{id:1003,name:"Tech Ethics"}]}
+  {id:1,  name:"Indian Classical Traditions",    icon:"🕉️", subcategories:[{id:101,name:"Sanskrit"},{id:102,name:"Bhagavad Gita"},{id:103,name:"Vedic Astronomy"},{id:104,name:"Ayurveda"},{id:105,name:"Kerala Mural Art"}]},
+  {id:2,  name:"Indian Financial Markets",        icon:"📊", subcategories:[{id:201,name:"Insurance Policy"},{id:202,name:"Market Analysis"},{id:203,name:"Regulatory Affairs"}]},
+  {id:3,  name:"Geopolitics & Complex Systems",   icon:"🌐", subcategories:[{id:301,name:"South Asia"},{id:302,name:"China"},{id:303,name:"Maritime Strategy"},{id:304,name:"Systems Thinking"}]},
+  {id:4,  name:"Literature & Writing",            icon:"✍️", subcategories:[{id:401,name:"Memoir"},{id:402,name:"Fiction"},{id:403,name:"Essays"},{id:404,name:"Indian Writing"}]},
+  {id:5,  name:"Visual Arts & Photography",       icon:"🎨", subcategories:[{id:501,name:"Kerala Mural"},{id:502,name:"Sculpture"},{id:503,name:"Photography"},{id:504,name:"Film"}]},
+  {id:6,  name:"Wildlife & Nature",               icon:"🦜", subcategories:[{id:601,name:"Birding"},{id:602,name:"Ecology"},{id:603,name:"Western Ghats"}]},
+  {id:7,  name:"Cinema",                          icon:"🎬", subcategories:[{id:701,name:"Indian Cinema"},{id:702,name:"World Cinema"},{id:703,name:"Documentary"}]},
+  {id:8,  name:"Linguistics",                     icon:"📜", subcategories:[{id:801,name:"Sanskrit-Dravidian Connections"},{id:802,name:"Konkani"},{id:803,name:"Etymology"}]},
+  {id:9,  name:"Travel & Geography",              icon:"🗺️", subcategories:[{id:901,name:"Kerala"},{id:902,name:"India"},{id:903,name:"East Africa"},{id:904,name:"Hill Stations"}]},
+  {id:10, name:"AI & Technology",                 icon:"🤖", subcategories:[{id:1001,name:"Large Language Models"},{id:1002,name:"AI Policy"},{id:1003,name:"Tech Ethics"}]}
 ];
 
-// ── RSS SOURCES — two per category, carefully chosen ─────────────────────────
+// ── RSS SOURCES ───────────────────────────────────────────────────────────────
 const RSS_SOURCES = [
-  // 1. Indian Classical Traditions
   {url:"https://scroll.in/feed",                                                                  label:"Scroll",                format:"article", catId:1},
   {url:"https://www.indicatoday.com/feed/",                                                       label:"Indica Today",          format:"article", catId:1},
-
-  // 2. Indian Financial Markets
   {url:"https://economictimes.indiatimes.com/industry/banking/insurance/rssfeeds/13358570.cms",   label:"Economic Times",        format:"article", catId:2},
   {url:"https://www.moneycontrol.com/rss/economy.xml",                                            label:"Moneycontrol",          format:"article", catId:2},
-
-  // 3. Geopolitics & Complex Systems
   {url:"https://thediplomat.com/feed/",                                                           label:"The Diplomat",          format:"article", catId:3},
   {url:"https://www.orfonline.org/feed/",                                                         label:"ORF",                   format:"article", catId:3},
-
-  // 4. Literature & Writing
   {url:"https://lithub.com/feed/",                                                                label:"Lit Hub",               format:"article", catId:4},
   {url:"https://www.theparisreview.org/feed",                                                     label:"Paris Review",          format:"article", catId:4},
-
-  // 5. Visual Arts & Photography
   {url:"https://hyperallergic.com/feed/",                                                         label:"Hyperallergic",         format:"article", catId:5},
   {url:"https://www.lensculture.com/rss/articles",                                                label:"LensCulture",           format:"article", catId:5},
-
-  // 6. Wildlife & Nature
   {url:"https://www.downtoearth.org.in/rss/",                                                     label:"Down to Earth",         format:"article", catId:6},
   {url:"https://www.birdingworld.co.uk/feed/",                                                    label:"Birding World",         format:"article", catId:6},
-
-  // 7. Cinema
   {url:"https://www.filmcompanion.in/feed/",                                                      label:"Film Companion",        format:"article", catId:7},
   {url:"https://www.thehindu.com/entertainment/movies/feeder/default.rss",                        label:"The Hindu Cinema",      format:"article", catId:7},
-
-  // 8. Linguistics
   {url:"https://languagelog.ldc.upenn.edu/nll/?feed=rss2",                                        label:"Language Log",          format:"article", catId:8},
   {url:"https://www.economist.com/johnson/rss.xml",                                               label:"The Economist Johnson", format:"article", catId:8},
-
-  // 9. Travel & Geography
   {url:"https://www.thehindu.com/life-and-style/travel/feeder/default.rss",                       label:"The Hindu Travel",      format:"article", catId:9},
   {url:"https://www.outlooktraveller.com/rss.xml",                                                label:"Outlook Traveller",     format:"article", catId:9},
-
-  // 10. AI & Technology
   {url:"https://www.technologyreview.com/feed/",                                                  label:"MIT Tech Review",       format:"article", catId:10},
   {url:"https://thegradient.pub/rss/",                                                            label:"The Gradient",          format:"article", catId:10},
 ];
 
 const PROXY = "https://api.allorigins.win/get?url=";
 
+// ── CATEGORY ACCENT COLORS ────────────────────────────────────────────────────
+const CAT_ACCENT_COLORS = {
+  1:'#8B2500', 2:'#1A5E6E', 3:'#2E4057', 4:'#7B4B2A',
+  5:'#7B35A0', 6:'#2D6A4F', 7:'#C0392B', 8:'#5D4037',
+  9:'#1A6B4A', 10:'#1A3A8B'
+};
+const CAT_BG = ['#FFF0E8','#E8F5F7','#F0EBF8','#E8F5E8','#FFF8E8','#F5E8F8','#E8F0F5','#F8EDE8','#EDF5E8','#E8EAF8'];
+
 // ── STATE ─────────────────────────────────────────────────────────────────────
-let topics     = JSON.parse(localStorage.getItem('sw_topics') || 'null') || DEFAULT_TOPICS;
-let savedItems = JSON.parse(localStorage.getItem('sw_saved')  || '[]');
-let allItems   = [];
-let activeFilter = 'all';
-let searchFilter = 'all';
-let nextId = 10000;
-let selIcon = "📚";
+let topics      = JSON.parse(localStorage.getItem('sw_topics') || 'null') || DEFAULT_TOPICS;
+let savedItems  = JSON.parse(localStorage.getItem('sw_saved')  || '[]');
+let readItems   = new Set(JSON.parse(localStorage.getItem('sw_read') || '[]'));
+let allItems    = [];
+let activeFilter    = 'all';
+let activeCatFilter = 'all';
+let searchFilter    = 'all';
+let hideRead        = false;
+let nextId          = 10000;
+let selIcon         = "📚";
 let editCatId=null, editSubId=null, editSubCatId=null, delCatId=null, delSubId=null;
+
+const scrollPositions = {};
 
 function persist()      { localStorage.setItem('sw_topics', JSON.stringify(topics)); }
 function persistSaved() { localStorage.setItem('sw_saved',  JSON.stringify(savedItems)); }
+function persistRead()  { localStorage.setItem('sw_read',   JSON.stringify([...readItems])); }
 function newId()        { return nextId++; }
 
 // ── GREETING ──────────────────────────────────────────────────────────────────
@@ -387,7 +446,7 @@ function parseRSS(xmlStr) {
 function stripHtml(html) {
   const t = document.createElement('div');
   t.innerHTML = html;
-  return (t.textContent || t.innerText || '').replace(/\s+/g,' ').trim().slice(0,180);
+  return (t.textContent || t.innerText || '').replace(/\s+/g,' ').trim().slice(0,220);
 }
 
 function timeAgo(ds) {
@@ -395,10 +454,46 @@ function timeAgo(ds) {
   const d = new Date(ds);
   if (isNaN(d)) return '';
   const s = (Date.now() - d) / 1000;
-  if (s < 3600)   return Math.floor(s/60)   + 'm ago';
-  if (s < 86400)  return Math.floor(s/3600) + 'h ago';
-  if (s < 604800) return Math.floor(s/86400)+ 'd ago';
+  if (s < 3600)   return Math.floor(s/60)  + 'm ago';
+  if (s < 86400)  return Math.floor(s/3600)+ 'h ago';
+  if (s < 604800) return Math.floor(s/86400)+'d ago';
   return d.toLocaleDateString('en-IN', {day:'numeric', month:'short'});
+}
+
+function readingTime(text) {
+  if (!text) return '';
+  const words = text.trim().split(/\s+/).length;
+  const mins = Math.max(1, Math.round(words / 200));
+  return `${mins} min read`;
+}
+
+// ── READ / UNREAD ─────────────────────────────────────────────────────────────
+function markRead(id) {
+  if (!readItems.has(id)) {
+    readItems.add(id);
+    persistRead();
+    updateUnreadBadge();
+  }
+}
+
+function updateUnreadBadge() {
+  const unread = allItems.filter(i => !readItems.has(i.id)).length;
+  const badge = document.getElementById('unreadBadge');
+  if (!badge) return;
+  if (unread > 0) {
+    badge.textContent = unread > 99 ? '99+' : unread;
+    badge.style.display = 'flex';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function updateFeedStats() {
+  const el = document.getElementById('feedStats');
+  if (!el || allItems.length === 0) { if(el) el.textContent=''; return; }
+  const unread = allItems.filter(i => !readItems.has(i.id)).length;
+  const total  = allItems.length;
+  el.innerHTML = `<strong>${unread}</strong> unread of <strong>${total}</strong> items across <strong>${RSS_SOURCES.length}</strong> sources`;
 }
 
 // ── FEED FETCH ────────────────────────────────────────────────────────────────
@@ -448,6 +543,7 @@ async function fetchFeed() {
       document.getElementById('feedList').style.display = 'flex';
       allItems.sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
       renderFeed();
+      updateFeedStats();
     }
   }
 
@@ -457,34 +553,85 @@ async function fetchFeed() {
   document.getElementById('feedProgress').style.display = 'none';
   document.getElementById('feedList').style.display = 'flex';
   renderFeed();
+  renderCatFilterPills();
+  updateUnreadBadge();
+  updateFeedStats();
 }
 
-// ── RENDER ────────────────────────────────────────────────────────────────────
+// ── CATEGORY FILTER PILLS ─────────────────────────────────────────────────────
+function renderCatFilterPills() {
+  const row = document.getElementById('catFilters');
+  if (!row) return;
+
+  // gather categories that actually have items
+  const catIds = [...new Set(allItems.map(i => i.catId))];
+  const cats   = catIds.map(id => topics.find(t => t.id === id)).filter(Boolean);
+
+  if (cats.length === 0) { row.innerHTML = ''; return; }
+
+  const allPill = `<div class="f-pill${activeCatFilter==='all'?' cat-active':''}" data-cat="all">All topics</div>`;
+  const pills   = cats.map(c =>
+    `<div class="f-pill${activeCatFilter===String(c.id)?' cat-active':''}" data-cat="${c.id}">${c.icon} ${escHtml(c.name)}</div>`
+  ).join('');
+
+  row.innerHTML = allPill + pills;
+  row.querySelectorAll('[data-cat]').forEach(p => {
+    p.addEventListener('click', () => {
+      activeCatFilter = p.dataset.cat;
+      row.querySelectorAll('[data-cat]').forEach(x => x.classList.remove('cat-active'));
+      p.classList.add('cat-active');
+      renderFeed();
+    });
+  });
+}
+
+// ── RENDER FEED ───────────────────────────────────────────────────────────────
 function renderFeed() {
-  const list  = document.getElementById('feedList');
-  const items = allItems.filter(i => activeFilter === 'all' || i.format === activeFilter);
+  const list = document.getElementById('feedList');
+  let items = allItems.filter(i => {
+    const formatOk = activeFilter === 'all' || i.format === activeFilter;
+    const catOk    = activeCatFilter === 'all' || String(i.catId) === activeCatFilter;
+    const readOk   = !hideRead || !readItems.has(i.id);
+    return formatOk && catOk && readOk;
+  });
+
   if (items.length === 0) {
     list.innerHTML = `<div class="feed-empty">
       <div class="feed-empty-icon">📡</div>
       <div class="feed-empty-title">${allItems.length===0?'Loading…':'No Items'}</div>
-      <div class="feed-empty-text">${allItems.length===0?'Fetching your feeds, please wait.':'No items match this filter.'}</div>
+      <div class="feed-empty-text">${
+        allItems.length===0
+          ? 'Fetching your feeds, please wait.'
+          : hideRead
+            ? 'All items in this view have been read. Turn off "Hide read" to see them.'
+            : 'No items match this filter.'
+      }</div>
     </div>`;
     return;
   }
+
   list.innerHTML = items.map(buildCard).join('');
+  updateFeedStats();
 }
 
+// ── BUILD CARD ────────────────────────────────────────────────────────────────
 function buildCard(item) {
-  const fmt = item.format;
+  const fmt      = item.format;
   const fmtLabel = fmt==='podcast'?'🎙 Podcast':fmt==='video'?'▶ Video':'📄 Article';
   const isSaved  = savedItems.some(s => s.id === item.id);
-  const eid  = encodeURIComponent(item.id);
-  const eurl = encodeURIComponent(item.url);
-  return `<div class="feed-card" onclick="openItem('${eurl}')">
+  const isRead   = readItems.has(item.id);
+  const color    = CAT_ACCENT_COLORS[item.catId] || 'var(--primary)';
+  const eid      = encodeURIComponent(item.id);
+  const eurl     = encodeURIComponent(item.url);
+  const rtime    = item.format === 'article' ? readingTime(item.desc) : '';
+
+  return `<div class="feed-card${isRead?' is-read':''}" onclick="openItem('${eurl}','${eid}')">
+    <div class="feed-card-accent" style="background:${color}"></div>
     <div class="feed-card-inner">
       <div class="feed-card-meta">
         <span class="cat-tag">${escHtml(item.catName)}</span>
         <span class="fmt-tag fmt-${fmt}">${fmtLabel}</span>
+        ${isRead?'<span class="read-tick">✓ read</span>':''}
         <button class="bm-btn" onclick="event.stopPropagation();toggleSave('${eid}')" title="Bookmark">
           ${isSaved?'🔖':'🏷️'}
         </button>
@@ -494,19 +641,31 @@ function buildCard(item) {
     </div>
     <div class="feed-card-footer">
       <span class="feed-card-source">${escHtml(item.source)}</span>
-      <span class="feed-card-date">${timeAgo(item.pubDate)}</span>
+      <span class="feed-card-right">
+        ${rtime?`<span class="feed-card-read-time">${rtime}</span>`:''}
+        <span class="feed-card-date">${timeAgo(item.pubDate)}</span>
+      </span>
     </div>
   </div>`;
 }
 
-function openItem(eu) { window.open(decodeURIComponent(eu), '_blank'); }
+function openItem(eu, eid) {
+  const url = decodeURIComponent(eu);
+  const id  = decodeURIComponent(eid);
+  markRead(id);
+  renderFeed();
+  updateFeedStats();
+  window.open(url, '_blank');
+}
 
+// ── SAVED ─────────────────────────────────────────────────────────────────────
 function toggleSave(eid) {
   const id  = decodeURIComponent(eid);
   const idx = savedItems.findIndex(s => s.id === id);
   if (idx >= 0) savedItems.splice(idx, 1);
   else { const item = allItems.find(i => i.id === id); if (item) savedItems.unshift(item); }
-  persistSaved(); renderFeed();
+  persistSaved();
+  renderFeed();
   if (document.getElementById('screen-saved').classList.contains('active')) renderSaved();
 }
 
@@ -541,34 +700,55 @@ function doSearch() {
     : `<div class="feed-empty"><div class="feed-empty-icon">🕵️</div><div class="feed-empty-title">No Results</div><div class="feed-empty-text">Try a different word.</div></div>`;
 }
 
-// ── FILTER ────────────────────────────────────────────────────────────────────
+// ── FORMAT FILTER ─────────────────────────────────────────────────────────────
 document.querySelectorAll('#feedFilters .f-pill').forEach(pill => {
   pill.addEventListener('click', () => {
     document.querySelectorAll('#feedFilters .f-pill').forEach(p => p.classList.remove('active'));
     pill.classList.add('active'); activeFilter = pill.dataset.filter; renderFeed();
   });
 });
+
+// ── HIDE READ TOGGLE ──────────────────────────────────────────────────────────
+document.getElementById('hideReadBtn').addEventListener('click', () => {
+  hideRead = !hideRead;
+  const btn = document.getElementById('hideReadBtn');
+  btn.classList.toggle('active', hideRead);
+  btn.textContent = hideRead ? '👁 Show read' : '👁 Hide read';
+  renderFeed();
+});
+
+// ── REFRESH ───────────────────────────────────────────────────────────────────
 document.getElementById('refreshBtn').addEventListener('click', fetchFeed);
 
 // ── NAVIGATION ────────────────────────────────────────────────────────────────
 document.querySelectorAll('.nav-item').forEach(btn => {
   btn.addEventListener('click', () => navigate(btn.dataset.screen));
 });
+
 function navigate(s) {
+  // save scroll position for current screen
+  const currentId = document.querySelector('.screen.active')?.id?.replace('screen-','');
+  if (currentId) scrollPositions[currentId] = document.getElementById('mainArea').scrollTop;
+
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   document.getElementById(`screen-${s}`).classList.add('active');
   document.querySelector(`[data-screen="${s}"]`).classList.add('active');
   document.getElementById('fab').classList.toggle('hidden', s !== 'topics');
+
   if (s === 'saved') renderSaved();
+
+  // restore scroll position
+  setTimeout(() => {
+    document.getElementById('mainArea').scrollTop = scrollPositions[s] || 0;
+  }, 30);
 }
 
 // ── CATEGORIES ────────────────────────────────────────────────────────────────
 const ICON_OPTIONS = ["🕉️","📚","📊","🌐","✍️","🎨","🦜","🎬","📜","🗺️","🤖","🏛️","🌿","🔬","📰","🎵","🎙️","🧘","🏔️","🌊","🦅","🌺","🧭","⚖️","🌙","☀️","🔭","🏺","🎭","📡","🌏","🎯","💡","🔮","🌸"];
-const CAT_BG = ['#FFF0E8','#E8F5F7','#F0EBF8','#E8F5E8','#FFF8E8','#F5E8F8','#E8F0F5','#F8EDE8','#EDF5E8','#E8EAF8'];
 
 function renderCategories() {
-  document.getElementById('categoryList').innerHTML = topics.map((cat,idx) => `
+  document.getElementById('categoryList').innerHTML = topics.map((cat, idx) => `
     <div class="category-card" id="cat-${cat.id}">
       <div class="category-header" onclick="toggleCat(${cat.id})">
         <div class="cat-icon-wrap" style="background:${CAT_BG[idx%CAT_BG.length]}">${cat.icon}</div>
