@@ -17,48 +17,39 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --primary:#8B2500; --primary-dark:#6B1C00; --primary-light:#C44A1C;
-      --gold:#C9A227; --gold-light:#E8C84A;
-      --accent:#1A5E6E; --accent-light:#248094;
-      --bg:#F7F0E6; --surface:#FFFDF9;
+      --primary:#8B2500; --gold:#C9A227; --gold-light:#E8C84A;
+      --accent:#1A5E6E; --bg:#F7F0E6; --surface:#FFFDF9;
       --border:#E8D5BC; --border-soft:#F0E4CF;
       --text:#1C1008; --text-2:#7B5E4A; --text-3:#A8917D;
-      --danger:#C0392B; --header-h:68px; --nav-h:62px;
-      --radius:14px; --radius-sm:8px;
+      --danger:#C0392B; --header-h:68px; --nav-h:62px; --radius:14px;
     }
     html,body { height:100%; font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); -webkit-tap-highlight-color:transparent; overscroll-behavior:none; overflow:hidden; }
 
-    /* INSTALL BANNER */
     .install-banner { display:none; background:var(--accent); color:white; padding:10px 16px; align-items:center; gap:10px; position:fixed; top:0; left:0; right:0; z-index:300; }
     .install-banner.visible { display:flex; }
     .install-banner-text { flex:1; font-size:13px; }
     .install-banner-btn { background:white; color:var(--accent); border:none; padding:7px 14px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
-    .install-dismiss { background:none; border:none; color:rgba(255,255,255,0.7); font-size:18px; cursor:pointer; }
+    .install-dismiss { background:none; border:none; color:rgba(255,255,255,0.7); font-size:18px; cursor:pointer; padding:4px; }
 
-    /* HEADER */
     .header { position:fixed; top:0; left:0; right:0; height:var(--header-h); background:var(--primary); display:flex; align-items:center; padding:0 18px; z-index:100; box-shadow:0 2px 16px rgba(0,0,0,0.25); }
     .header.banner-open { top:44px; }
     .header-brand { flex:1; }
     .header-sanskrit { font-family:'Noto Sans Devanagari',sans-serif; font-weight:600; font-size:21px; color:var(--gold); line-height:1.1; letter-spacing:0.03em; }
-    .header-roman { font-family:'Cormorant Garamond',serif; font-weight:400; font-size:10px; color:rgba(255,255,255,0.6); letter-spacing:0.3em; text-transform:uppercase; margin-top:1px; }
-    .header-actions { display:flex; gap:10px; align-items:center; }
+    .header-roman { font-family:'Cormorant Garamond',serif; font-size:10px; color:rgba(255,255,255,0.6); letter-spacing:0.3em; text-transform:uppercase; margin-top:1px; }
     .icon-btn { width:38px; height:38px; border-radius:50%; border:none; background:rgba(255,255,255,0.1); color:var(--gold-light); font-size:17px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
 
-    /* MAIN */
     .main { position:fixed; top:var(--header-h); bottom:var(--nav-h); left:0; right:0; overflow-y:auto; -webkit-overflow-scrolling:touch; }
     .screen { display:none; padding:16px 14px 24px; min-height:100%; animation:fadeIn 0.18s ease; }
     .screen.active { display:block; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
 
-    /* BOTTOM NAV */
     .bottom-nav { position:fixed; bottom:0; left:0; right:0; height:var(--nav-h); background:var(--surface); border-top:1px solid var(--border); display:flex; z-index:100; box-shadow:0 -2px 16px rgba(0,0,0,0.07); }
-    .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; border:none; background:none; cursor:pointer; padding:8px 0 10px; color:var(--text-3); transition:color 0.18s; position:relative; }
+    .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; border:none; background:none; cursor:pointer; padding:8px 0 10px; color:var(--text-3); position:relative; font-family:'DM Sans',sans-serif; }
     .nav-item.active { color:var(--primary); }
     .nav-item.active::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:32px; height:2px; background:var(--primary); border-radius:0 0 2px 2px; }
     .nav-icon { font-size:20px; line-height:1; }
     .nav-label { font-size:10px; font-weight:500; letter-spacing:0.04em; }
 
-    /* GREETING */
     .greeting-card { background:var(--primary); border-radius:var(--radius); padding:20px; margin-bottom:14px; position:relative; overflow:hidden; }
     .greeting-card::after { content:'स्वाध्याय'; font-family:'Noto Sans Devanagari',sans-serif; position:absolute; right:-10px; bottom:-18px; font-size:72px; color:rgba(255,255,255,0.06); line-height:1; pointer-events:none; }
     .greeting-period { font-size:11px; color:rgba(255,255,255,0.6); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px; }
@@ -66,57 +57,52 @@
     .greeting-date { font-size:12px; color:rgba(255,255,255,0.55); margin-top:6px; }
     .greeting-quote { margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.12); font-family:'Cormorant Garamond',serif; font-style:italic; font-size:14px; color:var(--gold-light); line-height:1.5; }
 
-    /* FEED HEADER */
     .feed-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
     .section-label { font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-3); }
     .refresh-btn { background:none; border:none; cursor:pointer; display:flex; align-items:center; gap:5px; font-family:'DM Sans',sans-serif; font-size:11px; font-weight:500; color:var(--accent); padding:4px 8px; border-radius:6px; }
-    .refresh-btn:active { background:var(--bg); }
     .refresh-icon { font-size:14px; display:inline-block; }
     .refresh-icon.spinning { animation:spin 0.8s linear infinite; }
     @keyframes spin { to{transform:rotate(360deg)} }
 
-    /* FILTER PILLS */
     .filter-row { display:flex; gap:7px; overflow-x:auto; padding-bottom:4px; margin-bottom:14px; scrollbar-width:none; }
     .filter-row::-webkit-scrollbar { display:none; }
-    .f-pill { flex-shrink:0; padding:6px 13px; border-radius:20px; border:1.5px solid var(--border); background:var(--surface); font-size:12px; font-weight:500; color:var(--text-2); cursor:pointer; transition:all 0.15s; font-family:'DM Sans',sans-serif; }
+    .f-pill { flex-shrink:0; padding:6px 13px; border-radius:20px; border:1.5px solid var(--border); background:var(--surface); font-size:12px; font-weight:500; color:var(--text-2); cursor:pointer; font-family:'DM Sans',sans-serif; }
     .f-pill.active { background:var(--primary); border-color:var(--primary); color:white; }
 
-    /* FEED CARDS */
     .feed-list { display:flex; flex-direction:column; gap:10px; padding-bottom:16px; }
-    .feed-card { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; cursor:pointer; text-decoration:none; display:block; color:inherit; }
-    .feed-card:active { box-shadow:0 2px 12px rgba(0,0,0,0.1); }
+    .feed-card { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; cursor:pointer; display:block; color:inherit; }
+    .feed-card:active { opacity:0.88; }
     .feed-card-inner { padding:14px; }
-    .feed-card-meta { display:flex; align-items:center; gap:7px; margin-bottom:8px; flex-wrap:wrap; }
-    .cat-tag { font-size:10px; font-weight:600; padding:2px 8px; border-radius:10px; background:rgba(139,37,0,0.08); color:var(--primary); letter-spacing:0.04em; }
-    .fmt-tag { font-size:10px; font-weight:500; padding:2px 7px; border-radius:10px; letter-spacing:0.03em; }
+    .feed-card-meta { display:flex; align-items:center; gap:6px; margin-bottom:8px; flex-wrap:wrap; }
+    .cat-tag { font-size:10px; font-weight:600; padding:2px 8px; border-radius:10px; background:rgba(139,37,0,0.08); color:var(--primary); }
+    .fmt-tag { font-size:10px; font-weight:500; padding:2px 7px; border-radius:10px; }
     .fmt-article { background:rgba(26,94,110,0.09); color:var(--accent); }
     .fmt-podcast { background:rgba(148,57,165,0.09); color:#7B35A0; }
     .fmt-video   { background:rgba(192,57,43,0.09); color:#C0392B; }
+    .bm-btn { background:none; border:none; cursor:pointer; font-size:16px; padding:2px; margin-left:auto; }
     .feed-card-title { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:600; color:var(--text); line-height:1.35; margin-bottom:7px; }
     .feed-card-desc { font-size:12px; color:var(--text-2); line-height:1.55; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
     .feed-card-footer { display:flex; align-items:center; justify-content:space-between; padding:9px 14px; border-top:1px solid var(--border-soft); background:var(--bg); }
     .feed-card-source { font-size:11px; color:var(--text-3); font-weight:500; }
     .feed-card-date   { font-size:11px; color:var(--text-3); }
 
-    /* SKELETON */
     .skeleton-list { display:flex; flex-direction:column; gap:10px; }
     .skeleton-card { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); padding:14px; }
     .skeleton-line { background:linear-gradient(90deg,var(--border) 25%,var(--border-soft) 50%,var(--border) 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; border-radius:6px; margin-bottom:9px; }
     @keyframes shimmer { to{background-position:-200% 0} }
     .sk-sm{height:12px;width:55%} .sk-lg{height:18px;width:90%} .sk-lg2{height:18px;width:72%;margin-bottom:10px} .sk-md{height:12px;width:80%} .sk-md2{height:12px;width:60%;margin-bottom:0}
 
-    /* EMPTY */
     .feed-empty { background:var(--surface); border-radius:var(--radius); border:1px dashed var(--border); padding:28px 20px; text-align:center; }
     .feed-empty-icon { font-size:32px; margin-bottom:10px; }
     .feed-empty-title { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; margin-bottom:6px; }
     .feed-empty-text { font-size:12px; color:var(--text-2); line-height:1.55; }
 
-    /* SCREEN HEADERS */
+    .feed-progress { font-size:11px; color:var(--text-3); text-align:center; padding:8px; }
+
     .screen-head { margin-bottom:18px; }
     .screen-title { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:700; color:var(--text); line-height:1; margin-bottom:4px; }
     .screen-subtitle { font-size:12px; color:var(--text-3); }
 
-    /* CATEGORIES */
     .category-list { display:flex; flex-direction:column; gap:8px; padding-bottom:80px; }
     .category-card { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; }
     .category-card.expanded { box-shadow:0 2px 12px rgba(0,0,0,0.08); }
@@ -134,17 +120,15 @@
     .category-card.expanded .sub-list { max-height:600px; border-top-width:1px; }
     .sub-list-inner { padding:6px 0; }
     .sub-item { display:flex; align-items:center; padding:9px 14px 9px 68px; gap:10px; }
-    .sub-dot { width:5px; height:5px; border-radius:50%; background:var(--primary); opacity:0.4; }
+    .sub-dot { width:5px; height:5px; border-radius:50%; background:var(--primary); opacity:0.4; flex-shrink:0; }
     .sub-name { flex:1; font-size:14px; color:var(--text); }
     .sub-ctrl-btn { width:26px; height:26px; border-radius:6px; border:none; background:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--text-3); }
     .add-sub-btn { display:flex; align-items:center; gap:8px; padding:9px 14px 9px 68px; background:none; border:none; cursor:pointer; color:var(--accent); font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; width:100%; }
 
-    /* FAB */
-    .fab { position:fixed; bottom:calc(var(--nav-h) + 14px); right:18px; width:54px; height:54px; border-radius:50%; background:var(--primary); color:white; font-size:26px; border:none; cursor:pointer; box-shadow:0 4px 18px rgba(139,37,0,0.38); display:flex; align-items:center; justify-content:center; z-index:90; transition:transform 0.18s; }
+    .fab { position:fixed; bottom:calc(var(--nav-h) + 14px); right:18px; width:54px; height:54px; border-radius:50%; background:var(--primary); color:white; font-size:26px; border:none; cursor:pointer; box-shadow:0 4px 18px rgba(139,37,0,0.38); display:flex; align-items:center; justify-content:center; z-index:90; }
     .fab:active { transform:scale(0.93); }
     .fab.hidden { display:none; }
 
-    /* MODALS */
     .overlay { position:fixed; inset:0; background:rgba(28,16,8,0.55); z-index:200; display:flex; align-items:flex-end; opacity:0; pointer-events:none; transition:opacity 0.22s; }
     .overlay.open { opacity:1; pointer-events:all; }
     .sheet { background:var(--surface); border-radius:20px 20px 0 0; padding:16px 18px 28px; width:100%; transform:translateY(100%); transition:transform 0.3s cubic-bezier(0.32,0.72,0,1); }
@@ -165,7 +149,6 @@
     .btn-danger  { background:var(--danger); color:white; }
     .delete-message { font-size:14px; color:var(--text-2); line-height:1.55; margin-bottom:6px; }
 
-    /* SAVED / SEARCH */
     .empty-state { display:flex; flex-direction:column; align-items:center; text-align:center; padding:56px 28px; }
     .empty-icon { font-size:46px; margin-bottom:14px; opacity:0.45; }
     .empty-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--text); margin-bottom:8px; }
@@ -193,9 +176,7 @@
     <div class="header-sanskrit">स्वाध्याय</div>
     <div class="header-roman">Swadhyaya</div>
   </div>
-  <div class="header-actions">
-    <button class="icon-btn" id="notifBtn">🔔</button>
-  </div>
+  <button class="icon-btn" id="notifBtn">🔔</button>
 </header>
 
 <main class="main" id="mainArea">
@@ -207,27 +188,23 @@
       <div class="greeting-date" id="greetingDate"></div>
       <div class="greeting-quote">स्वाध्यायान्मा प्रमदः — Let not self-study be neglected.</div>
     </div>
-
     <div class="feed-header">
       <div class="section-label">Your Feed</div>
-      <button class="refresh-btn" id="refreshBtn">
-        <span class="refresh-icon" id="refreshIcon">↻</span> Refresh
-      </button>
+      <button class="refresh-btn" id="refreshBtn"><span class="refresh-icon" id="refreshIcon">↻</span> Refresh</button>
     </div>
-
     <div class="filter-row" id="feedFilters">
       <div class="f-pill active" data-filter="all">All</div>
       <div class="f-pill" data-filter="article">Articles</div>
       <div class="f-pill" data-filter="podcast">Podcasts</div>
       <div class="f-pill" data-filter="video">Video</div>
     </div>
-
     <div id="feedContainer">
       <div class="skeleton-list" id="feedSkeleton">
         <div class="skeleton-card"><div class="skeleton-line sk-sm"></div><div class="skeleton-line sk-lg"></div><div class="skeleton-line sk-lg2"></div><div class="skeleton-line sk-md"></div><div class="skeleton-line sk-md2"></div></div>
         <div class="skeleton-card"><div class="skeleton-line sk-sm"></div><div class="skeleton-line sk-lg"></div><div class="skeleton-line sk-md"></div><div class="skeleton-line sk-md2"></div></div>
         <div class="skeleton-card"><div class="skeleton-line sk-sm"></div><div class="skeleton-line sk-lg"></div><div class="skeleton-line sk-lg2"></div><div class="skeleton-line sk-md2"></div></div>
       </div>
+      <div class="feed-progress" id="feedProgress" style="display:none"></div>
       <div class="feed-list" id="feedList" style="display:none"></div>
     </div>
   </div>
@@ -243,7 +220,7 @@
   <div class="screen" id="screen-saved">
     <div class="screen-head">
       <div class="screen-title">Saved</div>
-      <div class="screen-subtitle">Articles, podcasts, and videos you bookmark</div>
+      <div class="screen-subtitle">Items you bookmark</div>
     </div>
     <div id="savedList"></div>
   </div>
@@ -317,29 +294,22 @@ const DEFAULT_TOPICS = [
   {id:10,name:"AI & Technology",             icon:"🤖", subcategories:[{id:1001,name:"Large Language Models"},{id:1002,name:"AI Policy"},{id:1003,name:"Tech Ethics"}]}
 ];
 
-// ── RSS SOURCES ───────────────────────────────────────────────────────────────
+// ── RSS SOURCES — one reliable source per category ────────────────────────────
 const RSS_SOURCES = [
-  {url:"https://indicatoday.com/feed/",                                                         label:"Indica Today",        format:"article", catId:1},
-  {url:"https://www.thehindu.com/society/faith/feeder/default.rss",                             label:"The Hindu",           format:"article", catId:1},
-  {url:"https://economictimes.indiatimes.com/industry/banking/insurance/rssfeeds/13358570.cms", label:"Economic Times",      format:"article", catId:2},
-  {url:"https://www.moneycontrol.com/rss/MCtopnews.xml",                                        label:"Moneycontrol",        format:"article", catId:2},
-  {url:"https://thewire.in/feed",                                                               label:"The Wire",            format:"article", catId:3},
-  {url:"https://www.orfonline.org/feed/",                                                       label:"ORF",                 format:"article", catId:3},
-  {url:"https://thediplomat.com/feed/",                                                         label:"The Diplomat",        format:"article", catId:3},
-  {url:"https://lithub.com/feed/",                                                              label:"Lit Hub",             format:"article", catId:4},
-  {url:"https://scroll.in/magazine/feed",                                                       label:"Scroll",              format:"article", catId:4},
-  {url:"https://hyperallergic.com/feed/",                                                       label:"Hyperallergic",       format:"article", catId:5},
-  {url:"https://www.downtoearth.org.in/rss/",                                                   label:"Down to Earth",       format:"article", catId:6},
-  {url:"https://www.thehindu.com/sci-tech/energy-and-environment/feeder/default.rss",           label:"The Hindu",           format:"article", catId:6},
-  {url:"https://www.filmcompanion.in/feed/",                                                    label:"Film Companion",      format:"article", catId:7},
-  {url:"https://www.thehindu.com/entertainment/movies/feeder/default.rss",                      label:"The Hindu Cinema",    format:"article", catId:7},
-  {url:"https://languagelog.ldc.upenn.edu/nll/?feed=rss2",                                      label:"Language Log",        format:"article", catId:8},
-  {url:"https://www.thehindu.com/life-and-style/travel/feeder/default.rss",                     label:"The Hindu Travel",    format:"article", catId:9},
-  {url:"https://www.technologyreview.com/feed/",                                                label:"MIT Tech Review",     format:"article", catId:10},
-  {url:"https://thegradient.pub/rss/",                                                          label:"The Gradient",        format:"article", catId:10},
+  {url:"https://scroll.in/feed",                                                          label:"Scroll",           format:"article", catId:1},
+  {url:"https://economictimes.indiatimes.com/industry/banking/insurance/rssfeeds/13358570.cms", label:"Economic Times", format:"article", catId:2},
+  {url:"https://thediplomat.com/feed/",                                                   label:"The Diplomat",     format:"article", catId:3},
+  {url:"https://lithub.com/feed/",                                                        label:"Lit Hub",          format:"article", catId:4},
+  {url:"https://hyperallergic.com/feed/",                                                 label:"Hyperallergic",    format:"article", catId:5},
+  {url:"https://www.downtoearth.org.in/rss/",                                             label:"Down to Earth",    format:"article", catId:6},
+  {url:"https://www.filmcompanion.in/feed/",                                              label:"Film Companion",   format:"article", catId:7},
+  {url:"https://languagelog.ldc.upenn.edu/nll/?feed=rss2",                                label:"Language Log",     format:"article", catId:8},
+  {url:"https://www.thehindu.com/life-and-style/travel/feeder/default.rss",               label:"The Hindu Travel", format:"article", catId:9},
+  {url:"https://www.technologyreview.com/feed/",                                          label:"MIT Tech Review",  format:"article", catId:10},
 ];
 
-const RSS2JSON = "https://api.rss2json.com/v1/api.json?count=5&rss_url=";
+// Using allorigins.win as CORS proxy — no rate limits, no API key needed
+const PROXY = "https://api.allorigins.win/get?url=";
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let topics     = JSON.parse(localStorage.getItem('sw_topics') || 'null') || DEFAULT_TOPICS;
@@ -350,6 +320,7 @@ let searchFilter = 'all';
 let nextId = 10000;
 let selIcon = "📚";
 let editCatId=null, editSubId=null, editSubCatId=null, delCatId=null, delSubId=null;
+let fetchAbort = null;
 
 function persist()      { localStorage.setItem('sw_topics', JSON.stringify(topics)); }
 function persistSaved() { localStorage.setItem('sw_saved',  JSON.stringify(savedItems)); }
@@ -367,52 +338,25 @@ function setGreeting() {
     `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-// ── FEED FETCH ────────────────────────────────────────────────────────────────
-async function fetchFeed() {
-  document.getElementById('feedSkeleton').style.display = '';
-  document.getElementById('feedList').style.display = 'none';
-  const icon = document.getElementById('refreshIcon');
-  icon.classList.add('spinning');
-
-  const catMap = {};
-  topics.forEach(t => { catMap[t.id] = t; });
-
-  const results = await Promise.allSettled(
-    RSS_SOURCES.map(src =>
-      fetch(RSS2JSON + encodeURIComponent(src.url))
-        .then(r => r.json())
-        .then(data => ({src, data}))
-    )
-  );
-
-  allItems = [];
-  results.forEach(r => {
-    if (r.status !== 'fulfilled') return;
-    const {src, data} = r.value;
-    if (!data || !data.items) return;
-    const cat = catMap[src.catId];
-    data.items.slice(0, 5).forEach(item => {
-      if (!item.title || !item.link) return;
-      allItems.push({
-        id:      item.guid || item.link,
-        title:   item.title,
-        desc:    stripHtml(item.description || item.content || ''),
-        url:     item.link,
-        source:  src.label,
-        format:  src.format,
-        catName: cat ? cat.name : '',
-        catId:   src.catId,
-        pubDate: item.pubDate || '',
-      });
+// ── RSS PARSING ───────────────────────────────────────────────────────────────
+function parseRSS(xmlStr) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xmlStr, 'text/xml');
+  const items = [];
+  doc.querySelectorAll('item').forEach(el => {
+    const get = tag => el.querySelector(tag)?.textContent?.trim() || '';
+    const link = get('link') || el.querySelector('guid')?.textContent?.trim() || '';
+    const title = get('title');
+    if (!title || !link) return;
+    items.push({
+      title,
+      link,
+      description: get('description') || get('content\\:encoded') || '',
+      pubDate: get('pubDate'),
+      guid: get('guid') || link,
     });
   });
-
-  allItems.sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
-
-  icon.classList.remove('spinning');
-  document.getElementById('feedSkeleton').style.display = 'none';
-  document.getElementById('feedList').style.display = 'flex';
-  renderFeed();
+  return items;
 }
 
 function stripHtml(html) {
@@ -432,13 +376,78 @@ function timeAgo(ds) {
   return d.toLocaleDateString('en-IN', {day:'numeric', month:'short'});
 }
 
+// ── FEED FETCH — sequential with progress ─────────────────────────────────────
+async function fetchFeed() {
+  document.getElementById('feedSkeleton').style.display = '';
+  document.getElementById('feedList').style.display = 'none';
+  document.getElementById('feedProgress').style.display = 'block';
+  document.getElementById('feedProgress').textContent = 'Loading feeds…';
+
+  const icon = document.getElementById('refreshIcon');
+  icon.classList.add('spinning');
+
+  const catMap = {};
+  topics.forEach(t => { catMap[t.id] = t; });
+
+  allItems = [];
+  let loaded = 0;
+
+  for (const src of RSS_SOURCES) {
+    try {
+      const proxyUrl = PROXY + encodeURIComponent(src.url);
+      const resp = await fetch(proxyUrl, {signal: AbortSignal.timeout(10000)});
+      const json = await resp.json();
+      const xml  = json.contents;
+      if (xml) {
+        const items = parseRSS(xml);
+        const cat = catMap[src.catId];
+        items.slice(0, 5).forEach(item => {
+          allItems.push({
+            id:      item.guid,
+            title:   item.title,
+            desc:    stripHtml(item.description),
+            url:     item.link,
+            source:  src.label,
+            format:  src.format,
+            catName: cat ? cat.name : '',
+            catId:   src.catId,
+            pubDate: item.pubDate,
+          });
+        });
+      }
+    } catch(e) { /* skip failed feeds silently */ }
+
+    loaded++;
+    document.getElementById('feedProgress').textContent =
+      `Loading… ${loaded}/${RSS_SOURCES.length} sources`;
+
+    // Show partial results as they come in
+    if (loaded % 3 === 0 && allItems.length > 0) {
+      document.getElementById('feedSkeleton').style.display = 'none';
+      document.getElementById('feedList').style.display = 'flex';
+      allItems.sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
+      renderFeed();
+    }
+  }
+
+  allItems.sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
+  icon.classList.remove('spinning');
+  document.getElementById('feedSkeleton').style.display = 'none';
+  document.getElementById('feedProgress').style.display = 'none';
+  document.getElementById('feedList').style.display = 'flex';
+  renderFeed();
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
 function renderFeed() {
   const list  = document.getElementById('feedList');
   const items = allItems.filter(i => activeFilter === 'all' || i.format === activeFilter);
   if (items.length === 0) {
-    list.innerHTML = `<div class="feed-empty"><div class="feed-empty-icon">📡</div>
-      <div class="feed-empty-title">${allItems.length===0?'No Connection':'No Items'}</div>
-      <div class="feed-empty-text">${allItems.length===0?'Check your connection and tap Refresh.':'No items match this filter.'}</div></div>`;
+    list.innerHTML = `<div class="feed-empty">
+      <div class="feed-empty-icon">📡</div>
+      <div class="feed-empty-title">${allItems.length===0?'Loading…':'No Items'}</div>
+      <div class="feed-empty-text">${allItems.length===0?'Fetching your feeds, please wait.':'No items match this filter.'}</div>
+    </div>`;
     return;
   }
   list.innerHTML = items.map(buildCard).join('');
@@ -448,15 +457,14 @@ function buildCard(item) {
   const fmt = item.format;
   const fmtLabel = fmt==='podcast'?'🎙 Podcast':fmt==='video'?'▶ Video':'📄 Article';
   const isSaved  = savedItems.some(s => s.id === item.id);
-  const eid = encodeURIComponent(item.id);
-  const eurl= encodeURIComponent(item.url);
+  const eid  = encodeURIComponent(item.id);
+  const eurl = encodeURIComponent(item.url);
   return `<div class="feed-card" onclick="openItem('${eurl}')">
     <div class="feed-card-inner">
       <div class="feed-card-meta">
         <span class="cat-tag">${escHtml(item.catName)}</span>
         <span class="fmt-tag fmt-${fmt}">${fmtLabel}</span>
-        <span style="flex:1"></span>
-        <button onclick="event.stopPropagation();toggleSave('${eid}')" style="background:none;border:none;cursor:pointer;font-size:16px;padding:2px" title="Bookmark">
+        <button class="bm-btn" onclick="event.stopPropagation();toggleSave('${eid}')" title="Bookmark">
           ${isSaved?'🔖':'🏷️'}
         </button>
       </div>
@@ -477,8 +485,7 @@ function toggleSave(eid) {
   const idx = savedItems.findIndex(s => s.id === id);
   if (idx >= 0) savedItems.splice(idx, 1);
   else { const item = allItems.find(i => i.id === id); if (item) savedItems.unshift(item); }
-  persistSaved();
-  renderFeed();
+  persistSaved(); renderFeed();
   if (document.getElementById('screen-saved').classList.contains('active')) renderSaved();
 }
 
@@ -509,9 +516,8 @@ function doSearch() {
     (searchFilter==='all' || i.format===searchFilter) &&
     (i.title.toLowerCase().includes(q) || i.desc.toLowerCase().includes(q) || i.catName.toLowerCase().includes(q))
   );
-  list.innerHTML = matches.length
-    ? matches.map(buildCard).join('')
-    : `<div class="feed-empty"><div class="feed-empty-icon">🕵️</div><div class="feed-empty-title">No Results</div><div class="feed-empty-text">Try a different word or refresh your feed.</div></div>`;
+  list.innerHTML = matches.length ? matches.map(buildCard).join('')
+    : `<div class="feed-empty"><div class="feed-empty-icon">🕵️</div><div class="feed-empty-title">No Results</div><div class="feed-empty-text">Try a different word.</div></div>`;
 }
 
 // ── FILTER ────────────────────────────────────────────────────────────────────
@@ -577,9 +583,10 @@ function toggleCat(id) { document.getElementById(`cat-${id}`).classList.toggle('
 function openOverlay(id)  { document.getElementById(id).classList.add('open'); }
 function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
 ['catOverlay','subOverlay','delOverlay'].forEach(id => {
-  document.getElementById(id).addEventListener('click', e => { if (e.target===document.getElementById(id)) closeOverlay(id); });
+  document.getElementById(id).addEventListener('click', e => {
+    if (e.target===document.getElementById(id)) closeOverlay(id);
+  });
 });
-
 function renderIconPicker() {
   document.getElementById('iconPicker').innerHTML = ICON_OPTIONS.map(ic =>
     `<div class="icon-opt${ic===selIcon?' selected':''}" onclick="pickIcon('${ic}')">${ic}</div>`).join('');
@@ -588,7 +595,6 @@ function pickIcon(ic) {
   selIcon=ic;
   document.querySelectorAll('.icon-opt').forEach(el=>el.classList.toggle('selected',el.textContent===ic));
 }
-
 document.getElementById('fab').addEventListener('click', openAddCat);
 function openAddCat() {
   editCatId=null; selIcon="📚";
@@ -611,7 +617,6 @@ document.getElementById('catSave').addEventListener('click',()=>{
   else topics.push({id:newId(),name,icon:selIcon,subcategories:[]});
   persist(); renderCategories(); closeOverlay('catOverlay');
 });
-
 function openAddSub(catId) {
   editSubCatId=catId; editSubId=null;
   document.getElementById('subModalTitle').textContent="Add Subtopic";
@@ -634,7 +639,6 @@ document.getElementById('subSave').addEventListener('click',()=>{
   else c.subcategories.push({id:newId(),name});
   persist(); renderCategories(); closeOverlay('subOverlay');
 });
-
 function openDelCat(id) {
   delCatId=id; delSubId=null;
   const c=topics.find(t=>t.id===id);
